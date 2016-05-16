@@ -111,7 +111,7 @@ A key component of this project will be finding a way to describe faces such tha
 * [FisherFaces](http://docs.opencv.org/2.4/modules/contrib/doc/facerec/facerec_tutorial.html#fisherfaces)
 
 #### OpenCV
-A _de facto_ standard for image processing and manipulation. Has bindings for nearly any language imaginable because its uses a C interface. [The docs](http://docs.opencv.org/2.4/modules/refman.html) are large, but you can you skim the [User Guide](http://docs.opencv.org/2.4/doc/user_guide/user_guide.html) and [Tutorials](http://docs.opencv.org/2.4/doc/tutorials/tutorials.html) to get an idea for the sorts of things you can do with OpenCV.
+A _de facto_ standard for image processing and manipulation. Has bindings for nearly any language imaginable because its uses a C++ interface. [The docs](http://docs.opencv.org/2.4/modules/refman.html) are large, but you can you skim the [User Guide](http://docs.opencv.org/2.4/doc/user_guide/user_guide.html) and [Tutorials](http://docs.opencv.org/2.4/doc/tutorials/tutorials.html) to get an idea for the sorts of things you can do with OpenCV.
 
 #### ElasticSearch
 Fuzzy search at scale. There's a lot of power here -- don't wory if you can't grok it all. We think ES has the potential to handle the reverse-face-search problem at scale with clever indexing.
