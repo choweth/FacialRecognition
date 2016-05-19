@@ -36,6 +36,35 @@ def findFaces(imagePath):
     #cv2.imshow("Faces found", image)
     #cv2.imwrite("Output.jpg", image)
     #cv2.waitKey(0)
+
+    # Rotates the image 30 degrees if no faces found
+    if (len(faces) == 0):
+        print "Rotating 30 counter clockwise..."
+        rotatedImage = rotateImage(image, 30)
+        rotatedGray = cv2.cvtColor(rotatedImage, cv2.COLOR_BGR2GRAY)
+        cv2.imshow("30 CCW", rotatedImage)
+        faces = faceCascade.detectMultiScale(
+            rotatedGray,
+            scaleFactor=1.1,
+            minNeighbors=10,
+            minSize=(50, 50), #size of crop region
+            flags = 0
+        )
+
+    # Rotates 30 degrees in the opposite direction
+    if (len(faces) == 0):
+        print "Rotating 30 clockwise..."
+        rotatedImage = rotateImage(image, -30)
+        rotatedGray = cv2.cvtColor(rotatedImage, cv2.COLOR_BGR2GRAY)
+        cv2.imshow("30 CW", rotatedImage)
+        faces = faceCascade.detectMultiScale(
+            rotatedGray,
+            scaleFactor=1.1,
+            minNeighbors=10,
+            minSize=(50, 50), #size of crop region
+            flags = 0
+        )
+
     return faces
 
 def cropScaleImage(img, x, y, w, h):
@@ -52,8 +81,14 @@ def cropScaleImage(img, x, y, w, h):
 
     return newerImage
 
+def rotateImage(img, angle):
+    rows, cols = img.shape[:2]
+    M = cv2.getRotationMatrix2D((cols/2, rows/2), angle, 1)
+    rotatedImage = cv2.warpAffine(img, M, (cols,rows))
+    return rotatedImage
+
 if __name__ =="__main__":
-    pic = "Images/g.jpg"
+    pic = "Images/c.jpg"
 
     faces = findFaces(pic)
     image = cv2.imread(pic)
