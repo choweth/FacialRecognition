@@ -110,15 +110,17 @@ def compressImage(img, bound):
 
 def imageToVector(img):
     l = []
-    for i in range(0, 599):
-        for j in range(0, 499):
-            l.append(img[i,j])
+    for i in range(600):
+        for j in range(500):
+            l.append(img[i,j,0])
+    return l
 
 def averageFaces(faces):
     newPic = numpy.empty((600,500,3), int)
+    grayFaces = numpy.empty((len(faces),600,500,3), int)
     avgVal = 0
     y = 0
-    print len(newPic[0,0])
+    # print len(newPic[0,0])
     for i in range(600):
         for j in range(500):
             for l in range(len(faces)):
@@ -127,11 +129,27 @@ def averageFaces(faces):
                 y = y + faces[l][i,j][1]
                 y = y + faces[l][i,j][2]
                 avgVal = avgVal + int(y / 3)
+                for m in range(3):
+                    grayFaces[l][i][j][m] = avgVal
             x = int((avgVal / len(faces)))
             for k in range(3):
                 newPic[i,j,k] = x
             avgVal = 0
-    return newPic
+    return newPic, grayFaces
+
+def differenceFace(origFace, meanFace):
+    diffPic = numpy.empty((600,500,3), int)
+    for i in range(600):
+        for j in range(500):
+            try:
+                x = origFace[i,j,0] - meanFace[i,j,0]
+                for k in range(3):
+                    diffPic[i,j,k] = x
+            except(IndexError):
+                print i, j
+                print origFace
+                return
+    return diffPic
 
 if __name__ =="__main__":
 
@@ -172,22 +190,30 @@ if __name__ =="__main__":
 
     # Writes each cropped face to its own file
     i = 0
-    for img in croppedFaces:
-        leftEye = findLeftEye(img)
-        for (x, y, w, h) in leftEye:
-            cv2.rectangle(img, (x, y-int(h*0.1)), (x+w, int(y+h*1.1)), (255, 0, 0), 2)
-        rightEye = findRightEye(img)
-        for (x, y, w, h) in rightEye:
-            cv2.rectangle(img, (x, y-int(h*0.1)), (x+w, int(y+h*1.1)), (0, 0, 255), 2)
-        
+    for img in croppedFaces:       
 
         cv2.imwrite("Output/Output_" + str(i) +  ".jpg", img)
         i += 1
 
-    meanFace = averageFaces(croppedFaces)
-    print meanFace
-    cv2.imshow("Mean Face", meanFace)
+    meanFace, grayFaces = averageFaces(croppedFaces)
+    # print meanFace
+    # cv2.imshow("Mean Face", meanFace)
     cv2.imwrite("Output/mf_Output.jpg", meanFace)
+    diffFace = differenceFace(grayFaces[0], meanFace)
+    diffFace2 = differenceFace(grayFaces[1], meanFace)
+    cv2.imwrite("Output/df_Output.jpg", diffFace)
+    # print cv2.cvtColor(croppedFaces[0], cv2.COLOR_BGR2GRAY)
+    diffVec = imageToVector(diffFace)
+    diffVec2 = imageToVector(diffFace2)
+    
+    a = []
+    a.append(diffVec)
+    a.append(diffVec2)
+    w, v = numpy.linalg.eig(numpy.matmul(a,zip(*a)))
+    print v
+    a = numpy.matmul(v,a)
+    print len(diffVec)
+    print len(a[0])
 
     print "Found {0} faces!".format(len(faces))
     cv2.imshow("Faces found", image)
