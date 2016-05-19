@@ -38,7 +38,7 @@ if __name__ =="__main__":
     image = cv2.imread("Images/abba.png")
     for (x, y, w, h) in faces:
             cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
-
+    print "Found {0} faces!".format(len(faces))
     cv2.imshow("Faces found", image)
     cv2.imwrite("Output.jpg", image)
     cv2.waitKey(0)
