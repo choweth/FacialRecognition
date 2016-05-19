@@ -4,7 +4,7 @@ import time
 
 # C:\Users\Clayton Howeth\Downloads\FaceDetect-master\FaceDetect-master\
 # Get user supplied values
-imagePath = "g.jpg"
+imagePath = "b.png"
 cascPath = "haarcascade_frontalface_default.xml"
 
 # Create the haar cascade
@@ -21,7 +21,7 @@ faces = faceCascade.detectMultiScale(
     scaleFactor=1.1,
     minNeighbors=10,
     minSize=(50, 50), #size of crop region
-    flags = cv2.cv.CV_HAAR_SCALE_IMAGE
+    flags = 0
 )
 print time.time() - now
 print "Found {0} faces!".format(len(faces))
