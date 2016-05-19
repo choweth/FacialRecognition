@@ -35,9 +35,6 @@ def findFaces(image):
     #cv2.imshow("Faces found", image)
     #cv2.imwrite("Output.jpg", image)
     #cv2.waitKey(0)
-
-    
-
     return faces
 
 def cropScaleImage(img, x, y, w, h):
@@ -76,6 +73,31 @@ def compressImage(img, bound):
         img = cv2.resize(img, (newCol, newRow), interpolation = cv2.INTER_AREA)
 
     return img
+
+def imageToVector(img):
+    l = []
+    for i in range(0, 599):
+        for j in range(0, 499):
+            l.append(img[i,j])
+
+def averageFaces(faces):
+    newPic = numpy.empty((600,500,3), int)
+    avgVal = 0
+    y = 0
+    print len(newPic[0,0])
+    for i in range(600):
+        for j in range(500):
+            for l in range(len(faces)):
+                y = 0
+                y = y + faces[l][i,j][0]
+                y = y + faces[l][i,j][1]
+                y = y + faces[l][i,j][2]
+                avgVal = avgVal + int(y / 3)
+            x = int((avgVal / len(faces)))
+            for k in range(3):
+                newPic[i,j,k] = x
+            avgVal = 0
+    return newPic
 
 if __name__ =="__main__":
     pic = "Images/a.jpg"
@@ -116,6 +138,11 @@ if __name__ =="__main__":
     for img in croppedFaces:
         cv2.imwrite("Output/Output_" + str(i) +  ".jpg", img)
         i += 1
+
+    meanFace = averageFaces(croppedFaces)
+    print meanFace
+    cv2.imshow("Mean Face", meanFace)
+    cv2.imwrite("Output/mf_Output.jpg", meanFace)
 
     print "Found {0} faces!".format(len(faces))
     cv2.imshow("Faces found", image)
