@@ -173,12 +173,13 @@ if __name__ =="__main__":
     # Writes each cropped face to its own file
     i = 0
     for img in croppedFaces:
-        leftEye = findLeftEye(img)
-        for (x, y, w, h) in leftEye:
-            cv2.rectangle(img, (x, y-int(h*0.1)), (x+w, int(y+h*1.1)), (255, 0, 0), 2)
-        rightEye = findRightEye(img)
-        for (x, y, w, h) in rightEye:
-            cv2.rectangle(img, (x, y-int(h*0.1)), (x+w, int(y+h*1.1)), (0, 0, 255), 2)
+        # Code to find left or right eyes
+        #leftEye = findLeftEye(img)
+        #for (x, y, w, h) in leftEye:
+        #    cv2.rectangle(img, (x, y-int(h*0.1)), (x+w, int(y+h*1.1)), (255, 0, 0), 2)
+        #rightEye = findRightEye(img)
+        #for (x, y, w, h) in rightEye:
+        #    cv2.rectangle(img, (x, y-int(h*0.1)), (x+w, int(y+h*1.1)), (0, 0, 255), 2)
         
 
         cv2.imwrite("Output/Output_" + str(i) +  ".jpg", img)
