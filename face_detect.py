@@ -60,18 +60,19 @@ def rotateImage(img, angle):
     rotatedImage = cv2.warpAffine(img, M, (cols,rows))
     return rotatedImage
 
-def compressImage(img):
+def compressImage(img, bound):
     rows, cols = img.shape[:2]
     rows = int(rows)
     cols = int(cols)
-    if (rows > 1200 and rows >= cols):
-        newRow = 1200
-        newCol = cols*(1200/rows)
+
+    if (rows > bound and rows >= cols):
+        newRow = bound
+        newCol = int(cols*(bound/float(rows)))
         img = cv2.resize(img, (newCol, newRow), interpolation = cv2.INTER_AREA)
 
-    elif (cols > 1200 and rows < cols):
-        newCol = 1200
-        newRow = int(rows*(1200/float(cols)))
+    elif (cols > bound and rows < cols):
+        newCol = bound
+        newRow = int(rows*(bound/float(cols)))
         img = cv2.resize(img, (newCol, newRow), interpolation = cv2.INTER_AREA)
 
     return img
@@ -80,7 +81,7 @@ if __name__ =="__main__":
     pic = "Images/a.jpg"
     image = cv2.imread(pic)
     #Compresses the picture down so the longest side is 1200 pixels. Keeps aspect ratio
-    image = compressImage(image)
+    image = compressImage(image, 1280)
     faces = findFaces(image)
     global rotatedImage
     
