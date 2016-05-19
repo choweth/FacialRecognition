@@ -69,9 +69,6 @@ def findFaces(image):
     #cv2.imshow("Faces found", image)
     #cv2.imwrite("Output.jpg", image)
     #cv2.waitKey(0)
-
-    
-
     return faces
 
 def cropScaleImage(img, x, y, w, h):
@@ -94,21 +91,47 @@ def rotateImage(img, angle):
     rotatedImage = cv2.warpAffine(img, M, (cols,rows))
     return rotatedImage
 
-def compressImage(img):
+def compressImage(img, bound):
     rows, cols = img.shape[:2]
     rows = int(rows)
     cols = int(cols)
-    if (rows > 1200 and rows >= cols):
-        newRow = 1200
-        newCol = cols*(1200/rows)
+
+    if (rows > bound and rows >= cols):
+        newRow = bound
+        newCol = int(cols*(bound/float(rows)))
         img = cv2.resize(img, (newCol, newRow), interpolation = cv2.INTER_AREA)
 
-    elif (cols > 1200 and rows < cols):
-        newCol = 1200
-        newRow = int(rows*(1200/float(cols)))
+    elif (cols > bound and rows < cols):
+        newCol = bound
+        newRow = int(rows*(bound/float(cols)))
         img = cv2.resize(img, (newCol, newRow), interpolation = cv2.INTER_AREA)
 
     return img
+
+def imageToVector(img):
+    l = []
+    for i in range(0, 599):
+        for j in range(0, 499):
+            l.append(img[i,j])
+
+def averageFaces(faces):
+    newPic = numpy.empty((600,500,3), int)
+    avgVal = 0
+    y = 0
+    print len(newPic[0,0])
+    for i in range(600):
+        for j in range(500):
+            for l in range(len(faces)):
+                y = 0
+                y = y + faces[l][i,j][0]
+                y = y + faces[l][i,j][1]
+                y = y + faces[l][i,j][2]
+                avgVal = avgVal + int(y / 3)
+            x = int((avgVal / len(faces)))
+            for k in range(3):
+                newPic[i,j,k] = x
+            avgVal = 0
+    return newPic
 
 if __name__ =="__main__":
 
@@ -116,7 +139,8 @@ if __name__ =="__main__":
     pic = "Images/crowd.jpg"
 
     image = cv2.imread(pic)
-    image = compressImage(image)
+    #Compresses the picture down so the longest side is 1280 pixels. Keeps aspect ratio
+    image = compressImage(image, 1280)
     faces = findFaces(image)
     global rotatedImage
     
@@ -159,6 +183,11 @@ if __name__ =="__main__":
 
         cv2.imwrite("Output/Output_" + str(i) +  ".jpg", img)
         i += 1
+
+    meanFace = averageFaces(croppedFaces)
+    print meanFace
+    cv2.imshow("Mean Face", meanFace)
+    cv2.imwrite("Output/mf_Output.jpg", meanFace)
 
     print "Found {0} faces!".format(len(faces))
     cv2.imshow("Faces found", image)
