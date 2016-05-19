@@ -80,7 +80,7 @@ def compressImage(img, bound):
 if __name__ =="__main__":
     pic = "Images/a.jpg"
     image = cv2.imread(pic)
-    #Compresses the picture down so the longest side is 1200 pixels. Keeps aspect ratio
+    #Compresses the picture down so the longest side is 1280 pixels. Keeps aspect ratio
     image = compressImage(image, 1280)
     faces = findFaces(image)
     global rotatedImage
