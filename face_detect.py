@@ -94,10 +94,29 @@ def rotateImage(img, angle):
     rotatedImage = cv2.warpAffine(img, M, (cols,rows))
     return rotatedImage
 
+def compressImage(img):
+    rows, cols = img.shape[:2]
+    rows = int(rows)
+    cols = int(cols)
+    if (rows > 1200 and rows >= cols):
+        newRow = 1200
+        newCol = cols*(1200/rows)
+        img = cv2.resize(img, (newCol, newRow), interpolation = cv2.INTER_AREA)
+
+    elif (cols > 1200 and rows < cols):
+        newCol = 1200
+        newRow = int(rows*(1200/float(cols)))
+        img = cv2.resize(img, (newCol, newRow), interpolation = cv2.INTER_AREA)
+
+    return img
+
 if __name__ =="__main__":
-    now = time.time()
+
+    now = time.time()           #start of time counter
     pic = "Images/crowd.jpg"
+
     image = cv2.imread(pic)
+    image = compressImage(image)
     faces = findFaces(image)
     global rotatedImage
     
@@ -144,5 +163,5 @@ if __name__ =="__main__":
     print "Found {0} faces!".format(len(faces))
     cv2.imshow("Faces found", image)
     cv2.imwrite("Output/Output.jpg", image)
-    print time.time() - now
+    print time.time() - now                     #prints out time elapsed in program
     cv2.waitKey(0)
