@@ -45,16 +45,18 @@ def cropScaleImage(img, x, y, w, h):
     width = 500
 
     if (h > height):
-        newerImage = cv2.resize(newImage, (width, height), interpolation = cv2.INTER_AREA)
+        newerImage = cv2.resize(newImage,(width, height), interpolation = cv2.INTER_AREA)
 
     else:
-        newerImage = cv2.resize(newImage,(2*width, 2*height), interpolation = cv2.INTER_CUBIC)
+        newerImage = cv2.resize(newImage,(width, height), interpolation = cv2.INTER_CUBIC)
 
     return newerImage
 
 if __name__ =="__main__":
-    faces = findFaces("Images/abba.png")
-    image = cv2.imread("Images/abba.png")
+    pic = "Images/g.jpg"
+
+    faces = findFaces(pic)
+    image = cv2.imread(pic)
 
     i=0
     newFaces = [None] * len(faces)
@@ -68,11 +70,10 @@ if __name__ =="__main__":
 
     i = 0
     for img in newFaces:
-        cv2.imshow("Found face", img)
-        cv2.imwrite("Output_" + str(i) +  ".jpg", img)
+        cv2.imwrite("Output/Output_" + str(i) +  ".jpg", img)
         i += 1
 
     print "Found {0} faces!".format(len(faces))
-    #cv2.imshow("Faces found", image)
-    cv2.imwrite("Output.jpg", image)
+    cv2.imshow("Faces found", image)
+    cv2.imwrite("Output/Output.jpg", image)
     cv2.waitKey(0)
