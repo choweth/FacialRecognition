@@ -1,3 +1,4 @@
+import numpy
 import math
 class Face:
     # A class to contain anything a face may need to keep track of
@@ -14,7 +15,9 @@ class Face:
     
     def compare(compFace):
         epsSquared = abs(faceSpaceProj - compFace.faceSpaceProj)^2
-        return epsSquared<comparisonThreshold
+        return epsSquared < comparisonThreshold
 
-    def isFace():
-        epsSquared = abs()
+    def isFace(faceSpace):
+        grayProj = numpy.matmul(numpy.matmul(faceSpace,faceSpace.transpose), grayFace)
+        epsSquared = abs(grayFace - grayProj)^2
+        return epsSquared < comparisonThreshold
