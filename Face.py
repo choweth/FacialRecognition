@@ -1,5 +1,5 @@
 import math
-class Face(object):
+class Face:
     # A class to contain anything a face may need to keep track of
 
     comparisonThreshold = 0.3
@@ -14,3 +14,7 @@ class Face(object):
     
     def compare(compFace):
         epsSquared = abs(faceSpaceProj - compFace.faceSpaceProj)^2
+        return epsSquared<comparisonThreshold
+
+    def isFace():
+        epsSquared = abs()

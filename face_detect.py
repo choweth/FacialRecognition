@@ -6,12 +6,6 @@ import numpy
 import DetectObject
 
 
-
-
-
-
-
-
 def cropScaleImage(img, x, y, w, h):
     newImage = img[y:y+h, x:x+w]
 
