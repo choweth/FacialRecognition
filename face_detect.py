@@ -115,6 +115,31 @@ def imageToVector(img):
             l.append(img[i,j,0])
     return l
 
+def vectorToImage(vec):
+    l = numpy.empty((600,500,3), int)
+    for i in range(600):
+        for j in range(500):
+            for k in range(3):
+                l[i,j,k] = vec[i*len(l[0])+j]
+    return l
+
+def scale(vec):
+    minVal = vec[0]
+    maxVal = vec[0]
+    for i in range(len(vec)):
+        if vec[i] < minVal:
+            minVal = vec[i]
+        if vec[i] > maxVal:
+            maxVal = vec[i]
+    print minVal, maxVal
+    print vec[0]
+    print (vec[0] - minVal), (maxVal-minVal)
+    print 255*((vec[0] - minVal)/(maxVal-minVal))
+    for i in range(len(vec)):
+        x = 255*((vec[i] - minVal)/(maxVal-minVal))
+        vec[i] = x
+    return vec
+
 def averageFaces(faces):
     newPic = numpy.empty((600,500,3), int)
     grayFaces = numpy.empty((len(faces),600,500,3), int)
@@ -190,9 +215,7 @@ if __name__ =="__main__":
 
     # Writes each cropped face to its own file
     i = 0
-<<<<<<< HEAD
-    for img in croppedFaces:       
-=======
+
     for img in croppedFaces:
         # Code to find left or right eyes
         #leftEye = findLeftEye(img)
@@ -201,8 +224,6 @@ if __name__ =="__main__":
         #rightEye = findRightEye(img)
         #for (x, y, w, h) in rightEye:
         #    cv2.rectangle(img, (x, y-int(h*0.1)), (x+w, int(y+h*1.1)), (0, 0, 255), 2)
-        
->>>>>>> 4415584d5ad3889e68e89873c3cb91c936da119a
 
         cv2.imwrite("Output/Output_" + str(i) +  ".jpg", img)
         i += 1
@@ -224,6 +245,11 @@ if __name__ =="__main__":
     w, v = numpy.linalg.eig(numpy.matmul(a,zip(*a)))
     print v
     a = numpy.matmul(v,a)
+    ef = a[0]
+    print ef
+    ef = scale(ef)
+    ef = vectorToImage(ef)
+    cv2.imwrite("Output/ef_Output.jpg", ef)
     print len(diffVec)
     print len(a[0])
 
