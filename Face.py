@@ -14,10 +14,10 @@ class Face:
         self.faceSpaceProj   #The projection onto the facespace
     
     def compare(compFace):
-        epsSquared = abs(faceSpaceProj - compFace.faceSpaceProj)^2
-        return epsSquared < comparisonThreshold
+        epsSquared = abs(faceSpaceProj - compFace.faceSpaceProj) ^ 2
+        return 1 - epsSquared
 
     def isFace(faceSpace):
         grayProj = numpy.matmul(numpy.matmul(faceSpace,faceSpace.transpose), grayFace)
-        epsSquared = abs(grayFace - grayProj)^2
-        return epsSquared < comparisonThreshold
+        epsSquared = abs(grayFace - grayProj) ^ 2
+        return 1 - epsSquared
