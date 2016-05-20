@@ -1,3 +1,4 @@
+import numpy
 import math
 import numpy
 import ImgManipulation as iManip
@@ -13,10 +14,7 @@ class Face:
     
     def compare(compFace):
         epsSquared = abs(faceSpaceProj - compFace.faceSpaceProj)^2
-        return epsSquared<comparisonThreshold
-
-    def isFace():
-        epsSquared = abs()
+        return epsSquared < comparisonThreshold
 
     def initDiff(self, meanFace):
         self.diffFace = iManip.differenceFace(self.grayFace, meanFace)
@@ -29,3 +27,9 @@ class Face:
     def initProjections(self, faceSpace):
         self.faceSpaceProj = numpy.matmul(faceSpace,self.diffVec)
         print faceSpaceProj.shape    
+
+    def isFace(faceSpace):
+        grayProj = numpy.matmul(numpy.matmul(faceSpace,faceSpace.transpose), grayFace)
+        epsSquared = abs(grayFace - grayProj)^2
+        return epsSquared < comparisonThreshold
+
