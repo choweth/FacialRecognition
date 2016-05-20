@@ -162,20 +162,6 @@ def averageFaces(faces):
             avgVal = 0
     return newPic, grayFaces
 
-def differenceFace(origFace, meanFace):
-    diffPic = numpy.empty((600,500,3), int)
-    for i in range(600):
-        for j in range(500):
-            try:
-                x = origFace[i,j,0] - meanFace[i,j,0]
-                for k in range(3):
-                    diffPic[i,j,k] = x
-            except(IndexError):
-                print i, j
-                print origFace
-                return
-    return diffPic
-
 if __name__ =="__main__":
 
     now = time.time()           #start of time counter
