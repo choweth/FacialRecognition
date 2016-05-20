@@ -1,16 +1,15 @@
 import math
+import numpy
+import ImgManipulation as iManip
+
 class Face:
     # A class to contain anything a face may need to keep track of
 
     comparisonThreshold = 0.3
 
-    def __init__(self):
-        self.orig            #The original image
-        self.diffFace        #The difference face
-        self.grayFace        #The grayscale face
-        self.diffVec         #The difference vector
-        self.eigenFace       #The eigenface
-        self.faceSpaceProj   #The projection onto the facespace
+    def __init__(self, image, x, y, w, h):
+        self.orig = iManip.cropScaleImage(image,x,y,w,h)    #The original image
+        self.grayFace = iManip.grayFace(self.orig)          #The grayscale face
     
     def compare(compFace):
         epsSquared = abs(faceSpaceProj - compFace.faceSpaceProj)^2
@@ -18,3 +17,15 @@ class Face:
 
     def isFace():
         epsSquared = abs()
+
+    def initDiff(self, meanFace):
+        self.diffFace = iManip.differenceFace(self.grayFace, meanFace)
+        self.diffVec = iManip.imageToVector(self.diffFace)
+        
+    def initEigenFace(self, eVec):
+        self.eigenVec = eVec
+        self.eigenFace = iManip.vectorToImage(iManip.scaleVals(eVec))
+
+    def initProjections(self, faceSpace):
+        self.faceSpaceProj = numpy.matmul(faceSpace,self.diffVec)
+        print faceSpaceProj.shape    

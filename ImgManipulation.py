@@ -71,10 +71,6 @@ def scaleVals(vec):
             minVal = vec[i]
         if vec[i] > maxVal:
             maxVal = vec[i]
-    # print minVal, maxVal
-    # print vec[0]
-    # print (vec[0] - minVal), (maxVal-minVal)
-    # print 255*((vec[0] - minVal)/(maxVal-minVal))
     for i in range(len(vec)):
         x = 255*((vec[i] - minVal)/(maxVal-minVal))
         vec[i] = x
@@ -83,22 +79,29 @@ def scaleVals(vec):
 # Averages all the faces to make the meanFace and saves the greyscale face
 def averageFaces(faces):
     newPic = numpy.empty((HEIGHT,WIDTH,DEPTH), int)
-    grayFaces = numpy.empty((len(faces),HEIGHT,WIDTH,DEPTH), int)
-    avgVal = 0
     for i in range(HEIGHT):
         for j in range(WIDTH):
+            avgVal = 0
             for l in range(len(faces)):
-                y = 0
-                for m in range(DEPTH):
-                    y = y + faces[l][i,j][m]
-                avgVal = avgVal + int(y / 3)
-                for m in range(DEPTH):
-                    grayFaces[l][i][j][m] = avgVal
+                avgVal = avgVal + faces[l].grayFace[i,j,0]
             x = int((avgVal / len(faces)))
             for k in range(DEPTH):
                 newPic[i,j,k] = x
+    return newPic
+
+def grayFace(img):
+    grayPic = numpy.empty((HEIGHT,WIDTH,DEPTH), int)
+    avgVal = 0
+    for i in range(HEIGHT):
+        for j in range(WIDTH):
+            y = 0
             avgVal = 0
-    return newPic, grayFaces
+            for m in range(DEPTH):
+                y = y + img[i,j][m]
+            avgVal = avgVal + int(y / 3)
+            for m in range(DEPTH):
+               grayPic[i][j][m] = avgVal
+    return grayPic
 
 # Creates the differenceFace (i.e. greyFace - meanFace) 
 def differenceFace(origFace, meanFace):
