@@ -4,7 +4,7 @@ import cv2
 class TestFaces(unittest.TestCase):
     def test_FrontFaces(self):
         image = cv2.imread("Images/abba.png")
-        self.assertEqual(len(face_detect.DetectObject.findObject(image,"Faces")),4)
+        self.assertEqual(len(face_detect.DetectObject.findObject(image,"Face")),4)
         image = cv2.imread("Images/a.png")
         self.assertEqual(len(face_detect.findFaces(image,"Face")),2)
         image = cv2.imread("Images/a.jpg")
