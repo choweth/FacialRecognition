@@ -33,10 +33,9 @@ class Face:
     # This can be used to assure the picture even is a face to begin with
     def initProjections(self, faceSpace):
         self.faceSpaceProj = numpy.matmul(faceSpace,self.diffVec)
-        grayProj = numpy.matmul(numpy.matmul(faceSpace,faceSpace.transpose), grayFace)
-        print faceSpaceProj.shape    
+        grayProj = numpy.matmul(zip(*faceSpace), numpy.matmul(faceSpace, self.grayFace[:,:,0].flatten()))
 
     # Returns the percent probability that a face image actually contains a face
-    def isFace(faceSpace):
-        epsSquared = abs(grayFace - grayProj) ^ 2
+    def isFace(self):
+        epsSquared = abs(self.grayFace[:,:,0].flatten() - self.grayProj) ^ 2
         return 1 - epsSquared

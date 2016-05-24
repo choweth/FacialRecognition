@@ -64,7 +64,7 @@ if __name__ =="__main__":
     
     for i in range(len(faces)):
         faces[i].initEigenFace(faceSpace[i])
-        # faces[i].initProjections(faceSpace)
+        faces[i].initProjections(faceSpace)
 
 
     i = 0
