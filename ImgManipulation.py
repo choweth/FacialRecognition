@@ -105,11 +105,14 @@ def grayFace(img):
 
 # Creates the differenceFace (i.e. greyFace - meanFace) 
 def differenceFace(origFace, meanFace):
-    diffPic = numpy.empty((HEIGHT,WIDTH,DEPTH), int)
+    diffPic = numpy.empty((HEIGHT,WIDTH,DEPTH), dtype='int64')
     for i in range(HEIGHT):
         for j in range(WIDTH):
             try:
-                x = origFace[i,j,0] - meanFace[i,j,0]
+                if (origFace[i,j,0] < meanFace[i,j,0]):
+                    x = 0
+                else:
+                    x = origFace[i,j,0] - meanFace[i,j,0]
                 for k in range(3):
                     diffPic[i,j,k] = x
             except(IndexError):
