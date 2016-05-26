@@ -66,11 +66,16 @@ if __name__ =="__main__":
         faces[i].initEigenFace(faceSpace[i])
         faces[i].initProjections(faceSpace)
 
-
     i = 0
     for face in faces:       
         cv2.imwrite("Output/EigenFace_" + str(i) +  ".jpg", face.eigenFace)
         i += 1
+
+    print "Comparing the first two faces..."
+    t1 = time.time()
+    print str(faces[0].compare(faces[1])) + " similarity score"
+    t2 = time.time()
+    print "Comparison took " + str(t2-t1) + " seconds"
 
     print "Found {0} faces!".format(len(faceLocs))
 ##    cv2.imwrite("Output/Output.jpg", image)
