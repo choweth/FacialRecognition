@@ -10,7 +10,7 @@ import Face
 if __name__ =="__main__":
 
     now = time.time()   #start of time counter
-    option = 0
+    option = 1 #0 for remake everything, 1 for read saved data
 
     if (option ==0):
         meanFace = cv2.imread("Data/MeanFace/meanFace.jpg")
@@ -71,11 +71,13 @@ if __name__ =="__main__":
         i = 0
         for (x, y, w, h) in faceLocs:
             faces.append(Face.Face(i,image,x,y,w,h))
+            cv2.rectangle(image, (x, y-int(h*0.1)), (x+w, int(y+h*1.1)), (0, 255, 0), 2)
             i += 1
         
         print "Created the faces array (original, gray) in:", time.time() - now
 
         meanFace = iManip.averageFaces(faces)
+        # meanFace = cv2.imread("Data/MeanFace/meanFace.jpg")
         
         print "Read meanFace in:", time.time() - now
 
@@ -93,12 +95,12 @@ if __name__ =="__main__":
         
         faceSpace = numpy.matmul(faceSpace,diffVecs)
         print "Calculated faceSpace in:", time.time() - now
-        
+
         for i in range(len(faces)):
             faces[i].initEigenFace(faceSpace[i])
             # faces[i].initProjections(faceSpace)
         print "Calculated eigenFace/eigenVec in:", time.time() - now
-
+        cv2.imshow("Output/Output.jpg", image)
         print "Found {0} faces!".format(len(faceLocs))
 
         text_file = open("Data/data.txt", "w")
