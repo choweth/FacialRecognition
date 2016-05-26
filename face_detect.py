@@ -10,7 +10,7 @@ import Face
 if __name__ =="__main__":
 
     now = time.time()   #start of time counter
-    option = 1 #0 for remake everything, 1 for read saved data
+    option = 0 #0 for remake everything, 1 for read saved data
 
     if (option ==0):
         meanFace = cv2.imread("Data/MeanFace/meanFace.jpg")

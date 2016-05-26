@@ -1,8 +1,8 @@
 import numpy
 import cv2
 
-HEIGHT = 300     # Height of stored face images
-WIDTH = 250      # Width of stored face images
+HEIGHT = 600     # Height of stored face images
+WIDTH = 500      # Width of stored face images
 DEPTH = 3        # Depth of stored face images (RGB values)
 
 # Crops out a face, and scales the face to 600x500

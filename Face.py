@@ -23,26 +23,32 @@ class Face:
             cv2.imwrite("Data/GrayFaces/GrayFace_" + str(self.ID) +  ".jpg", self.grayFace)
             print "Grayed one face in:", time.time() - now
     
+    # Compares the calling face with the given face.
+    # Returns the percent similarity
     def compare(compFace):
-        epsSquared = abs(faceSpaceProj - compFace.faceSpaceProj)^2
-        return epsSquared < comparisonThreshold
+        epsSquared = abs(faceSpaceProj - compFace.faceSpaceProj) ^ 2
+        return 1 - epsSquared
 
+    # Initializes the DifferenceFace and differenceVector
     def initDiff(self, meanFace):
         self.diffFace = iManip.differenceFace(self.grayFace, meanFace)
         cv2.imwrite("Data/DifferenceFaces/DifferenceFace_" + str(self.ID) +  ".jpg", self.diffFace)
         self.diffVec = iManip.imageToVector(self.diffFace)
-        
+    
+    # Initializes the eigenFace and eigenVector
     def initEigenFace(self, eVec):
         self.eigenVec = eVec
         self.eigenFace = iManip.vectorToImage(iManip.scaleVals(eVec))
         cv2.imwrite("Data/EigenFaces/EigenFace_" + str(self.ID) +  ".jpg", self.eigenFace)
 
+    # Projects the original image onto the faceSpace
+    # This is used to compare an eigenface with the original face
+    # This can be used to assure the picture even is a face to begin with
     def initProjections(self, faceSpace):
         self.faceSpaceProj = numpy.matmul(faceSpace,self.diffVec)
-        print faceSpaceProj.shape    
+        grayProj = numpy.matmul(zip(*faceSpace), numpy.matmul(faceSpace, self.grayFace[:,:,0].flatten()))
 
-    def isFace(faceSpace):
-        grayProj = numpy.matmul(numpy.matmul(faceSpace,faceSpace.transpose), grayFace)
-        epsSquared = abs(grayFace - grayProj)^2
-        return epsSquared < comparisonThreshold
-
+    # Returns the percent probability that a face image actually contains a face
+    def isFace(self):
+        epsSquared = abs(self.grayFace[:,:,0].flatten() - self.grayProj) ^ 2
+        return 1 - epsSquared
