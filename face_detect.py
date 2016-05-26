@@ -5,9 +5,13 @@ import time
 import numpy
 import ImgManipulation as iManip
 import DetectObject
+import Person
 import Face
 
+
 if __name__ =="__main__":
+    i = {1,2,3,4,5,6,7,8,9}
+    pat = Person.Person(i,1221,"Pat")
     now = time.time()   #start of time counter
     option = 0 #0 for remake everything, 1 for read saved data
 
@@ -15,7 +19,7 @@ if __name__ =="__main__":
         meanFace = cv2.imread("Data/MeanFace/meanFace.jpg")
         text_file = open("Data/data.txt", "r")
         numFaces = int(text_file.readline())
-
+        print type(meanFace)
         faces = []
         diffVecs = []
         for i in range(numFaces):
@@ -23,9 +27,9 @@ if __name__ =="__main__":
             faces[i].initDiff(meanFace)
             diffVecs.append(faces[i].diffVec)
         print "Initialized Faces and diffFace/DiffVec in:", time.time() - now
-
-        w, faceSpace = numpy.linalg.eig(numpy.matmul(diffVecs,zip(*diffVecs)))
-        faceSpace = numpy.matmul(faceSpace,diffVecs)
+       
+        w, faceSpace = numpy.linalg.eig(numpy.dot(diffVecs,zip(*diffVecs)))
+        faceSpace = numpy.dot(faceSpace,diffVecs)
         print "Calculated faceSpace in:", time.time() - now
         
         for i in range(len(faces)):
@@ -91,9 +95,9 @@ if __name__ =="__main__":
         for l in range(len(faces)):
             diffVecs.append(faces[l].diffVec)
         
-        w, faceSpace = numpy.linalg.eig(numpy.matmul(diffVecs,zip(*diffVecs)))
+        w, faceSpace = numpy.linalg.eig(numpy.dot(diffVecs,diffVecs))
         
-        faceSpace = numpy.matmul(faceSpace,diffVecs)
+        faceSpace = numpy.dot(faceSpace,zip(*diffVecs))
         print "Calculated faceSpace in:", time.time() - now
 
         for i in range(len(faces)):
