@@ -56,7 +56,8 @@ if __name__ =="__main__":
     diffVecs = []
     for l in range(len(faces)):
         diffVecs.append(faces[l].diffVec)
-        
+
+    
     w, faceSpace = numpy.linalg.eig(numpy.matmul(diffVecs,zip(*diffVecs)))
 
     faceSpace = numpy.matmul(faceSpace,diffVecs)

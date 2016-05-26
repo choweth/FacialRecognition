@@ -11,7 +11,9 @@ class TestFaces(unittest.TestCase):
         self.assertEqual(len(face_detect.findFaces(image, "Face")),2)
         image = cv2.imread("Images/f.jpg")
         self.assertEqual(len(face_detect.findFaces(image, "Face")),2)
+    def test_Eigenstuff(self):
         
+        return
 try:
     suite = unittest.TestLoader().loadTestsFromTestCase(TestFaces)
     unittest.TextTestRunner(verbosity=2).run(suite)
