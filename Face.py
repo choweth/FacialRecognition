@@ -25,9 +25,14 @@ class Face:
     
     # Compares the calling face with the given face.
     # Returns the percent similarity
-    def compare(compFace):
-        epsSquared = abs(faceSpaceProj - compFace.faceSpaceProj) ^ 2
-        return 1 - epsSquared
+    def compare(self, compFace):
+        #epsSquared = 0
+        #for i in range(len(self.faceSpaceProj)):
+        #    epsSquared += int(self.faceSpaceProj[i] - compFace.faceSpaceProj[i])^2
+        epsSquared = numpy.dot(self.faceSpaceProj, compFace.faceSpaceProj)
+        epsSquared = epsSquared / (numpy.linalg.norm(self.faceSpaceProj)*numpy.linalg.norm(compFace.faceSpaceProj))
+        
+        return epsSquared**2
 
     # Initializes the DifferenceFace and differenceVector
     def initDiff(self, meanFace):
@@ -45,10 +50,14 @@ class Face:
     # This is used to compare an eigenface with the original face
     # This can be used to assure the picture even is a face to begin with
     def initProjections(self, faceSpace):
-        self.faceSpaceProj = numpy.matmul(faceSpace,self.diffVec)
-        grayProj = numpy.matmul(zip(*faceSpace), numpy.matmul(faceSpace, self.grayFace[:,:,0].flatten()))
+        self.faceSpaceProj = []
+
+        for i in range(int(faceSpace.shape[0])):
+            currentNumerator = numpy.dot(self.diffVec, faceSpace[i,:])
+            currentDenominator = numpy.dot(faceSpace[i,:], faceSpace[i,:])
+            self.faceSpaceProj.append((currentNumerator/currentDenominator))
 
     # Returns the percent probability that a face image actually contains a face
-    def isFace(self):
-        epsSquared = abs(self.grayFace[:,:,0].flatten() - self.grayProj) ^ 2
-        return 1 - epsSquared
+    #def isFace(self):
+        #epsSquared = int(numpy.linalg.norm(self.grayFace[:,:,0].flatten() - self.grayProj)) ^ 2
+        #return 1 - epsSquared
