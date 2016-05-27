@@ -25,6 +25,9 @@ bld/
 [Bb]in/
 [Oo]bj/
 Output/
+Data/
+Images/
+*.pyc
 
 # Visual Studio 2015 cache/options directory
 .vs/
