@@ -13,7 +13,7 @@ if __name__ =="__main__":
     i = {1,2,3,4,5,6,7,8,9}
     pat = Person.Person(i,1221,"Pat")
     now = time.time()   #start of time counter
-    option = 0 #0 for remake everything, 1 for read saved data
+    option = 0 #1 for remake everything, 0 for read saved data
 
     if (option ==0):
         meanFace = cv2.imread("Data/MeanFace/meanFace.jpg")
