@@ -10,10 +10,11 @@ import Face
 
 
 if __name__ =="__main__":
-    i = {1,2,3,4,5,6,7,8,9}
-    pat = Person.Person(i,1221,"Pat")
     now = time.time()   #start of time counter
-    option = 0 #1 for remake everything, 0 for read saved data
+    option = 3  # 0 for read saved data (faces)
+                # 1 for remake everything (faces)
+                # 2 for read saved data (people)
+                # 3 for remake everything (people)
 
     if (option ==0):
         meanFace = cv2.imread("Data/MeanFace/meanFace.jpg")
@@ -114,3 +115,16 @@ if __name__ =="__main__":
         
         print time.time() - now         #prints out time elapsed in program
         cv2.waitKey(0)
+
+    elif (option == 2):
+        print "hello"
+
+    elif (option == 3):
+        pics = []
+        for i in range(7207, 7217):    
+            pic = "Images/IMG_" + str(i) + ".JPG"
+            image = cv2.imread(pic)
+            image = iManip.compressImage(image, 1280)
+            pics.append(image)
+        p = Person.Person(0,len(pics),pics, "Barbra")
+        cv2.imwrite("Data/TestImages/Barbra_Mean_Face_Test.jpg", p.meanFace)
