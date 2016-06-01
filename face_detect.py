@@ -12,7 +12,7 @@ import shlex
 
 if __name__ =="__main__":
     now = time.time()   #start of time counter
-    option = 3  # 0 for read saved data (faces)
+    option = 2  # 0 for read saved data (faces)
                 # 1 for remake everything (faces)
                 # 2 for read saved data (people)
                 # 3 for remake everything (people)
@@ -119,15 +119,18 @@ if __name__ =="__main__":
         cv2.waitKey(0)
 
     elif (option == 2): # reads in all saved people
+        meanFace = cv2.imread("Data/MeanFace/meanFace.jpg")
         file = open("Data/neededShit.txt", "r")
         for line in file:
             s = line;
             splitarr = shlex.split(s)
             people.append(Person.Person(splitarr[0],splitarr[1],splitarr[2]))
         file.close()
-        file = open("Data/num.txt", "w")
-        file.write(str(len(people)))
-        file.close()
+        for person in people:
+            person.initDiffFace(meanFace)
+##        file = open("Data/num.txt", "w")
+##        file.write(str(len(people)))
+##        file.close()
 
     elif (option == 3):
         pics = []

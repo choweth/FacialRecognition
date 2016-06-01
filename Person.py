@@ -16,6 +16,9 @@ class Person:
         if (len(imgs) == 0):
             blah = -1
             print blah
+            self.name = name
+            self.identifier = identification
+            self.meanFace = cv2.imread("Data/MeanFace/" + str(self.identifier) + ".jpg")
         else:
             self.faces = []
             print len(imgs)
