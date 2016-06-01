@@ -12,31 +12,35 @@ class Person:
 
     ##the constructor, accepts a list of images of the person, some identifying tag,
     ##and an optional name.
-    def __init__(self, identification, numImgs, imgs = [], name = "P.L. Faccia"):
-        self.faces = []
-        print len(imgs)
+    def __init__(self, identification, numImgs, name = "P.L. Faccia", imgs = []):
         if (len(imgs) == 0):
-            for i in range(numImgs):
-                faces.append(Face.Face(self.identifier,numImgs))
+            blah = -1
+            print blah
         else:
-            self.images = []
-            self.numImgs = len(self.images)
-            try:
-                image = numpy.empty([3,3,3],int)
-                if (type(imgs[0]) is not type(image)):
-                    raise TypeError("Person must be passed a list of images, was passed a list of "
-                                   +str(type(imgs[0])))
-                self.images = imgs
-            except ZeroDivisionError as z:
-                print traceback.print_exc(z)
-                print z
-                print "WHAT? how?"
-            except TypeError as t:
-                print traceback.print_exc(t)
-                print t 
-            self.identifier = identification
-            self.name = name
-            self.initMeanFace()
+            self.faces = []
+            print len(imgs)
+            if (len(imgs) == 0):
+                for i in range(numImgs):
+                    faces.append(Face.Face(self.identifier,numImgs))
+            else:
+                self.images = []
+                self.numImgs = len(self.images)
+                try:
+                    image = numpy.empty([3,3,3],int)
+                    if (type(imgs[0]) is not type(image)):
+                        raise TypeError("Person must be passed a list of images, was passed a list of "
+                                       +str(type(imgs[0])))
+                    self.images = imgs
+                except ZeroDivisionError as z:
+                    print traceback.print_exc(z)
+                    print z
+                    print "WHAT? how?"
+                except TypeError as t:
+                    print traceback.print_exc(t)
+                    print t 
+                self.identifier = identification
+                self.name = name
+                self.initMeanFace()
         
     def initMeanFace(self):
         faces = []
@@ -54,6 +58,5 @@ class Person:
                 print traceback.print_exc(e)
                 print e
         
-        c = iManip.averageFaces(faces)
-        self.meanFace = c
-        
+        self.meanFace = iManip.averageFaces(faces)
+        cv2.imwrite("Data/MeanFace/" + str(self.identifier) + ".jpg", self.meanFace)

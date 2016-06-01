@@ -7,6 +7,7 @@ import ImgManipulation as iManip
 import DetectObject
 import Person
 import Face
+import shlex
 
 
 if __name__ =="__main__":
@@ -15,6 +16,7 @@ if __name__ =="__main__":
                 # 1 for remake everything (faces)
                 # 2 for read saved data (people)
                 # 3 for remake everything (people)
+    people = []
 
     if (option ==0):
         meanFace = cv2.imread("Data/MeanFace/meanFace.jpg")
@@ -75,7 +77,7 @@ if __name__ =="__main__":
         faces = []
         i = 0
         for (x, y, w, h) in faceLocs:
-            faces.append(Face.Face(i,image,x,y,w,h))
+            faces.append(Face.Face(i,0,image,x,y,w,h))
             cv2.rectangle(image, (x, y-int(h*0.1)), (x+w, int(y+h*1.1)), (0, 255, 0), 2)
             i += 1
         
@@ -96,9 +98,9 @@ if __name__ =="__main__":
         for l in range(len(faces)):
             diffVecs.append(faces[l].diffVec)
         
-        w, faceSpace = numpy.linalg.eig(numpy.dot(diffVecs,diffVecs))
+        w, faceSpace = numpy.linalg.eig(numpy.dot(diffVecs,zip(*diffVecs)))
         
-        faceSpace = numpy.dot(faceSpace,zip(*diffVecs))
+        faceSpace = numpy.dot(faceSpace,diffVecs)
         print "Calculated faceSpace in:", time.time() - now
 
         for i in range(len(faces)):
@@ -116,15 +118,36 @@ if __name__ =="__main__":
         print time.time() - now         #prints out time elapsed in program
         cv2.waitKey(0)
 
-    elif (option == 2):
-        print "hello"
+    elif (option == 2): # reads in all saved people
+        file = open("Data/neededShit.txt", "r")
+        for line in file:
+            s = line;
+            splitarr = shlex.split(s)
+            people.append(Person.Person(splitarr[0],splitarr[1],splitarr[2]))
+        file.close()
+        file = open("Data/num.txt", "w")
+        file.write(str(len(people)))
+        file.close()
 
     elif (option == 3):
         pics = []
-        for i in range(7207, 7217):    
+        file = open("Data/num.txt", "r")
+        n = file.readline()
+        n = int(n)
+        file.close()
+        print n
+        x = raw_input("Who is this face: ")
+        for i in range(7207, 7210):    
             pic = "Images/IMG_" + str(i) + ".JPG"
             image = cv2.imread(pic)
             image = iManip.compressImage(image, 1280)
             pics.append(image)
-        p = Person.Person(0,len(pics),pics, "Barbra")
-        cv2.imwrite("Data/TestImages/Barbra_Mean_Face_Test.jpg", p.meanFace)
+        p = Person.Person(n,len(pics),x,pics)
+        file = open("Data/neededShit.txt", "a")
+        file.write(str(p.identifier) + " " + str(len(p.images)) + " " + p.name + "\n")
+        file.close()
+        file = open("Data/num.txt", "w")
+        n += 1
+        file.write(str(n))
+        file.close()
+        # cv2.imwrite("Data/TestImages/Barbra_Mean_Face_Test.jpg", p.meanFace)
