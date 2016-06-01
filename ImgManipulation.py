@@ -120,3 +120,13 @@ def differenceFace(origFace, meanFace):
                 print origFace
                 return
     return diffPic
+
+def addToMeanFace(origFace, meanFace, numPeople):
+    # diffPic = numpy.empty((HEIGHT,WIDTH,DEPTH), dtype='int64')
+    # print meanFace
+    for i in range(HEIGHT):
+        for j in range(WIDTH):
+            for k in range(DEPTH):
+                meanFace[i,j,k] = int(((meanFace[i,j,k] * numPeople) + origFace[i,j,k])/(numPeople+1))
+    # print meanFace
+    return meanFace

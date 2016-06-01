@@ -60,3 +60,7 @@ class Person:
         
         self.meanFace = iManip.averageFaces(faces)
         cv2.imwrite("Data/MeanFace/" + str(self.identifier) + ".jpg", self.meanFace)
+
+    def initDiffFace(self, mf):
+        self.differenceFace = iManip.differenceFace(self.meanFace, mf)
+        cv2.imwrite("Data/DifferenceFaces/" + str(self.identifier) + ".jpg", self.differenceFace)

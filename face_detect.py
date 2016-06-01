@@ -86,7 +86,7 @@ if __name__ =="__main__":
         meanFace = iManip.averageFaces(faces)
         # meanFace = cv2.imread("Data/MeanFace/meanFace.jpg")
         
-        print "Read meanFace in:", time.time() - now
+        print "Read/Calculated meanFace in:", time.time() - now
 
         for face in faces:
             face.initDiff(meanFace)
@@ -131,18 +131,24 @@ if __name__ =="__main__":
 
     elif (option == 3):
         pics = []
+        # meanFace = numpy.empty((iManip.HEIGHT,iManip.WIDTH,iManip.DEPTH), dtype='int64')
+        meanFace = cv2.imread("Data/MeanFace/meanFace.jpg")
         file = open("Data/num.txt", "r")
         n = file.readline()
         n = int(n)
         file.close()
         print n
         x = raw_input("Who is this face: ")
-        for i in range(7207, 7210):    
-            pic = "Images/IMG_" + str(i) + ".JPG"
+        for i in range(7354, 7363):    
+            pic = "Images/fullcontact/IMG_" + str(i) + ".JPG"
+            print i
             image = cv2.imread(pic)
             image = iManip.compressImage(image, 1280)
             pics.append(image)
         p = Person.Person(n,len(pics),x,pics)
+        meanFace = iManip.addToMeanFace(p.meanFace,meanFace,n)
+        cv2.imwrite("Data/MeanFace/meanFace.jpg",meanFace)
+        # p.initDiffFace(meanFace)
         file = open("Data/neededShit.txt", "a")
         file.write(str(p.identifier) + " " + str(len(p.images)) + " " + p.name + "\n")
         file.close()
