@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0, "/root/know-that-face/know-that-face/HTTP Server/src")
+
 from app import app
 from flask import request
 from src import ImgManipulation as iManip

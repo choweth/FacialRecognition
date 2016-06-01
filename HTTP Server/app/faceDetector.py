@@ -1,7 +1,10 @@
+import sys
+sys.path.insert(0, "/root/know-that-face/know-that-face/HTTP Server/src")
+
 from app import app
 from flask import request
-from src import DetectObject
-from scr import ImgManipulation as iManip
+import DetectObject
+import ImgManipulation as iManip
 import cv2
 import numpy as np
 
