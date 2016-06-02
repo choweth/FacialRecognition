@@ -107,6 +107,9 @@ if __name__ =="__main__":
         cv2.imshow("Output/Output.jpg", image)
         print "Found {0} faces!".format(len(faceLocs))
 
+        print "The first two faces are " + faces[0].compare(faces[1]) + " percent similar"
+        print "The first face is " + faces[0].compare(faces[0]) + " percent similar with itself"
+
         text_file = open("Data/data.txt", "w")
         # text_file.write("Purchase Amount: %s" % TotalAmount)
         text_file.write(str(len(faces)))
