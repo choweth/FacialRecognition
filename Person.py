@@ -14,9 +14,8 @@ class Person:
     ##and an optional name.
     def __init__(self, identification, numImgs, name = "P.L. Faccia", imgs = []):
         if (len(imgs) == 0):
-            blah = -1
-            print blah
             self.name = name
+            print self.name
             self.identifier = identification
             self.meanFace = cv2.imread("Data/MeanFace/" + str(self.identifier) + ".jpg")
         else:

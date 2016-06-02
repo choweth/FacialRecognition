@@ -11,11 +11,18 @@ import shlex
 
 
 if __name__ =="__main__":
+    print "0. Old faces code"
+    print "1. More old faces code"
+    print "2. Read saved data and make difference faces"
+    print "3. Add a new person"
+    user = raw_input("Please pick an option: ")
+    userInt = int(user)
     now = time.time()   #start of time counter
-    option = 2  # 0 for read saved data (faces)
-                # 1 for remake everything (faces)
-                # 2 for read saved data (people)
-                # 3 for remake everything (people)
+    option = userInt    # 0 for read saved data (faces)
+                        # 1 for remake everything (faces)
+                        # 2 for read saved data (people) and make difference faces
+                        # 3 for remake everything (people)
+                        # 4 
     people = []
 
     if (option ==0):
