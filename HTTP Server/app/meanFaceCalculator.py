@@ -3,7 +3,7 @@ sys.path.insert(0, "/root/know-that-face/know-that-face/HTTP Server/src")
 
 from app import app
 from flask import request
-from src import ImgManipulation as iManip
+import ImgManipulation as iManip
 import cv2
 import numpy as np
 
@@ -15,12 +15,10 @@ def atMeanFaceCalc():
 def postMeanFaceCalc():
     # Read the faces from the files sent
     faces = []
-    i =0
     for key in request.files:
         buf = request.files[key].read()
         x = np.fromstring(buf, dtype = 'uint8')
-        faces[i] = cv2.imdecode(x, cv2.IMREAD_UNCHANGED)
-        i += 1
+        faces.append(cv2.imdecode(x, cv2.IMREAD_UNCHANGED))
 
     meanFace = iManip.averageFaces(faces)
 

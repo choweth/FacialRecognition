@@ -28,14 +28,12 @@ def postFaceDetector():
     print "Success!"
 
     #Used only if making images for each face
-    i = 0
     faces = []
 
     print "Drawing rectangles..."
     for (x, y, w, h) in faceLocs:
         #Crop out and scale the face
-        faces[i] = iManip(image, x, y, w, h)
-        i += 1
+        #faces.append(iManip(image, x, y, w, h))
 
         #Draw box around the face
         cv2.rectangle(image, (x, y-int(h*0.1)), (x+w, int(y+h*1.1)), (0, 255, 0), 2)
@@ -47,19 +45,20 @@ def postFaceDetector():
     print "Success!"
 
     # Encode faces
-    bufFaces = []
-    i=0
-    faceMap = {}
-    for face in faces:
-        flag, bufFaces[i] = cv2.imencode("return"+i+".jpg", face[i], [cv2.IMWRITE_JPEG_QUALITY, 90])
-        i += 1
-        faceMap['return'+i] = bufFaces[i].tobytes()
+    #bufFaces = []
+    #faceMap = {}
+    #i=0
+    #for face in faces:
+        #flag, buffer = cv2.imencode("return"+i+".jpg", face[i], [cv2.IMWRITE_JPEG_QUALITY, 90])
+	#bufFaces.append(buffer)
+        #faceMap['return'+i] = bufFaces[i].tobytes()
+	#i += 1
 
     # Uncomment to return locations of bounding boxes
-    #return faceLocs.tobytes()
+    return faceLocs.tobytes()
 
     # Uncomment to return original image with boxes drawn
     return buf.tobytes()
 
     # Uncomment to return map of face images
-    return faceMap
+    #return faceMap
