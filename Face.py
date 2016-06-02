@@ -9,7 +9,7 @@ class Face:
 
     comparisonThreshold = 0.3
 
-    def __init__(self, i, image = [[[]]], x = -1, y = 0, w = 0, h = 0):
+    def __init__(self, i, i2 = 0, image = [[[]]], x = -1, y = 0, w = 0, h = 0, name = "null"):
         now = time.time()
         self.ID = i
         if (x == -1):
@@ -17,10 +17,10 @@ class Face:
             self.grayFace = cv2.imread("Data/GrayFaces/GrayFace_" + str(self.ID) + ".jpg")
         else:
             self.orig = iManip.cropScaleImage(image,x,y,w,h)    #The original image
-            cv2.imwrite("Data/OriginalFaces/OriginalFace_" + str(self.ID) +  ".jpg", self.orig)
+            cv2.imwrite("Data/OriginalFaces/" + str(self.ID) + "_" + str(i2) +  ".jpg", self.orig)
             print "Crop/Scaled one face in:", time.time() - now
             self.grayFace = iManip.grayFace(self.orig)          #The grayscale face
-            cv2.imwrite("Data/GrayFaces/GrayFace_" + str(self.ID) +  ".jpg", self.grayFace)
+            cv2.imwrite("Data/GrayFaces/" + str(self.ID) + "_" + str(i2) + ".jpg", self.grayFace)       # name + "_" + 
             print "Grayed one face in:", time.time() - now
     
     # Compares the calling face with the given face.

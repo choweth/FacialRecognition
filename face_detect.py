@@ -7,13 +7,16 @@ import ImgManipulation as iManip
 import DetectObject
 import Person
 import Face
+import shlex
 
 
 if __name__ =="__main__":
-    i = {1,2,3,4,5,6,7,8,9}
-    pat = Person.Person(i,1221,"Pat")
     now = time.time()   #start of time counter
-    option = 0 #1 for remake everything, 0 for read saved data
+    option = 2  # 0 for read saved data (faces)
+                # 1 for remake everything (faces)
+                # 2 for read saved data (people)
+                # 3 for remake everything (people)
+    people = []
 
     if (option ==0):
         meanFace = cv2.imread("Data/MeanFace/meanFace.jpg")
@@ -74,7 +77,7 @@ if __name__ =="__main__":
         faces = []
         i = 0
         for (x, y, w, h) in faceLocs:
-            faces.append(Face.Face(i,image,x,y,w,h))
+            faces.append(Face.Face(i,0,image,x,y,w,h))
             cv2.rectangle(image, (x, y-int(h*0.1)), (x+w, int(y+h*1.1)), (0, 255, 0), 2)
             i += 1
         
@@ -83,7 +86,7 @@ if __name__ =="__main__":
         meanFace = iManip.averageFaces(faces)
         # meanFace = cv2.imread("Data/MeanFace/meanFace.jpg")
         
-        print "Read meanFace in:", time.time() - now
+        print "Read/Calculated meanFace in:", time.time() - now
 
         for face in faces:
             face.initDiff(meanFace)
@@ -95,9 +98,9 @@ if __name__ =="__main__":
         for l in range(len(faces)):
             diffVecs.append(faces[l].diffVec)
         
-        w, faceSpace = numpy.linalg.eig(numpy.dot(diffVecs,diffVecs))
+        w, faceSpace = numpy.linalg.eig(numpy.dot(diffVecs,zip(*diffVecs)))
         
-        faceSpace = numpy.dot(faceSpace,zip(*diffVecs))
+        faceSpace = numpy.dot(faceSpace,diffVecs)
         print "Calculated faceSpace in:", time.time() - now
 
         for i in range(len(faces)):
@@ -117,3 +120,46 @@ if __name__ =="__main__":
         
         print time.time() - now         #prints out time elapsed in program
         cv2.waitKey(0)
+
+    elif (option == 2): # reads in all saved people
+        meanFace = cv2.imread("Data/MeanFace/meanFace.jpg")
+        file = open("Data/neededShit.txt", "r")
+        for line in file:
+            s = line;
+            splitarr = shlex.split(s)
+            people.append(Person.Person(splitarr[0],splitarr[1],splitarr[2]))
+        file.close()
+        for person in people:
+            person.initDiffFace(meanFace)
+##        file = open("Data/num.txt", "w")
+##        file.write(str(len(people)))
+##        file.close()
+
+    elif (option == 3):
+        pics = []
+        # meanFace = numpy.empty((iManip.HEIGHT,iManip.WIDTH,iManip.DEPTH), dtype='int64')
+        meanFace = cv2.imread("Data/MeanFace/meanFace.jpg")
+        file = open("Data/num.txt", "r")
+        n = file.readline()
+        n = int(n)
+        file.close()
+        print n
+        x = raw_input("Who is this face: ")
+        for i in range(7354, 7363):    
+            pic = "Images/fullcontact/IMG_" + str(i) + ".JPG"
+            print i
+            image = cv2.imread(pic)
+            image = iManip.compressImage(image, 1280)
+            pics.append(image)
+        p = Person.Person(n,len(pics),x,pics)
+        meanFace = iManip.addToMeanFace(p.meanFace,meanFace,n)
+        cv2.imwrite("Data/MeanFace/meanFace.jpg",meanFace)
+        # p.initDiffFace(meanFace)
+        file = open("Data/neededShit.txt", "a")
+        file.write(str(p.identifier) + " " + str(len(p.images)) + " " + p.name + "\n")
+        file.close()
+        file = open("Data/num.txt", "w")
+        n += 1
+        file.write(str(n))
+        file.close()
+        # cv2.imwrite("Data/TestImages/Barbra_Mean_Face_Test.jpg", p.meanFace)
