@@ -10,6 +10,7 @@
 *.pyproj
 *.ppk
 *.zip
+*.pyc
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
