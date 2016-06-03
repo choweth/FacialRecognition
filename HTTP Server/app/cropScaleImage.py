@@ -13,25 +13,27 @@ def greetCropScale():
 
 @app.route('/cropScale', methods = ["POST"])
 def cropScale():
-    print "Request recieved"
-    sentFile = request.files['image'].read()
-    print "File loaded"
+    print "Request recieved at cropScale\n"
+
+    print "Loading location data..."
     x = int(request.form['x'])
-    print x
-    print type(x)
     y = int(request.form['y'])
-    print y
     w = int(request.form['w'])
-    print w
     h = int(request.form['h'])
-    print h
-    npData = np.fromstring(sentFile, dtype = 'uint8')
-    print "Converted from numpy array"
-    image = cv2.imdecode(npData, cv2.IMREAD_UNCHANGED)
-    print "Decoded image"
+    print "Success!\n"
     
+    print "Loading file..."
+    sentFile = request.files['image'].read()
+    npData = np.fromstring(sentFile, dtype = 'uint8')
+    image = cv2.imdecode(npData, cv2.IMREAD_UNCHANGED)
+    print "Success!\n"
+    
+    print "Processing image..."
     processedImage = iManip.cropScaleImage(image, x, y, w, h)
-    print "Processed image"
+    print "Success!\n"
+
+    print "Encoding response..."
     flag, buf = cv2.imencode('return.jpg', processedImage, [cv2.IMWRITE_JPEG_QUALITY, 90])
-    print "Encoded image"
+    print "Success!\n"
+
     return buf.tobytes()

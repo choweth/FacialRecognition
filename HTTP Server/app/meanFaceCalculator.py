@@ -14,27 +14,33 @@ def atMeanFaceCalc():
 @app.route('/meanFaceCalculator', methods = ['POST'])
 def postMeanFaceCalc():
     # Read the faces from the files sent
-    print "Request recieved"
+    print "Request recieved at meanFaceCalculator"
     faces = []
     i = 0
+    print "Loading files...\n"
     for key in request.files:
         buf = request.files[key].read()
         x = np.fromstring(buf, dtype = 'uint8')
         faces.append(cv2.imdecode(x, cv2.IMREAD_UNCHANGED))
 	print "Loaded face " + str(i)
 	i += 1
+    print "\nAll files loaded successfully!\n"
     grayFaces = []
     i = 0
+    print "Greyscaling faces...\n"
     for face in faces:
         grayFaces.append(iManip.grayFace(face))
 	print "Greysclaed face " + str(i)
 	i += 1
+    print "\nAll faces greyscaled successfully!\n"
 
+    print "Calculating mean face..."
     meanFace = averageFaces(grayFaces)
-    print "Found the mean face"
+    print "Success!\n"
 
+    print "Encoding response..."
     flag, buf = cv2.imencode("return.jpg", meanFace, [cv2.IMWRITE_JPEG_QUALITY, 90])
-    print "Encoded the mean face"
+    print "Success!\n"
     return buf.tobytes()
 
 def averageFaces(faces):
