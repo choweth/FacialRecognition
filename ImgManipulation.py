@@ -1,5 +1,8 @@
 import numpy
+import math
 import cv2
+import DetectObject
+import time
 
 HEIGHT = 600     # Height of stored face images
 WIDTH = 500      # Width of stored face images
@@ -79,6 +82,7 @@ def scaleVals(vec):
 # Averages all the faces to make the meanFace and saves the greyscale face
 def averageFaces(faces):
     newPic = numpy.empty((HEIGHT,WIDTH,DEPTH), int)
+    
     for i in range(HEIGHT):
         for j in range(WIDTH):
             avgVal = 0
@@ -123,6 +127,37 @@ def differenceFace(origFace, meanFace):
                 return
     return diffPic
 
+def alignFace(image):
+    return image    ##########Fix this code dammit###########
+    now = time.time()
+    lEye = DetectObject.findObject(image, "Left Eye")
+    rEye = DetectObject.findObject(image, "Right Eye")
+    mouth = DetectObject.findObject(image, "Mouth")
+    point1x = lEye[0][0]+ lEye[0][2]/2 #set the first point to the center of the left eye 
+    point1y = lEye[0][1]+ lEye[0][3]/2
+    point2x = rEye[0][0]+ rEye[0][2]/2 #set the second point to the center of the right eye 
+    point2y = rEye[0][1]+ rEye[0][3]/2
+    point3x = mouth[0][0]+ mouth[0][2]/2 #set the third point to the center of the mouth eye 
+    point3y = mouth[0][1]+ mouth[0][3]/2
+    point1x = (point1x + point2x)/2 # find a point that is halfway between the two eyes
+    point1y = (point1y + point2y)/2
+    hypo = math.hypot(point1x-point3x,point1y-point3y)
+    opp = point1y - point3y
+    rotationAngle = math.acos(opp/hypo)
+    rotationAngle = math.copysign(rotationAngle, opp)
+
+    for (x, y, w, h) in lEye:
+        cv2.rectangle(image, (x, y-int(h)), (x+w, int(y+h)), (0, 255, 0), 2)
+    for (x, y, w, h) in rEye:
+        cv2.rectangle(image, (x, y-int(h)), (x+w, int(y+h)), (0, 255, 0), 2)
+    for (x, y, w, h) in mouth:
+        cv2.rectangle(image, (x, y-int(h)), (x+w, int(y+h)), (0, 255, 0), 2)
+    x = rotateImage(image,rotationAngle)
+    cv2.imwrite("Data/TestImages/rotatedFace"+str(rotationAngle)+".jpg",image)
+    print "aligned one face in: ", time.time()-now
+    return x
+    
+
 def addToMeanFace(origFace, meanFace, numPeople):
     # diffPic = numpy.empty((HEIGHT,WIDTH,DEPTH), dtype='int64')
     # print meanFace
@@ -132,6 +167,7 @@ def addToMeanFace(origFace, meanFace, numPeople):
                 meanFace[i,j,k] = int(((meanFace[i,j,k] * numPeople) + origFace[i,j,k])/(numPeople+1))
     # print meanFace
     return meanFace
+
 
 def averageImgArr(faces):
     newPic = numpy.empty((HEIGHT,WIDTH,DEPTH), int)
