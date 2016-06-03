@@ -130,3 +130,15 @@ def addToMeanFace(origFace, meanFace, numPeople):
                 meanFace[i,j,k] = int(((meanFace[i,j,k] * numPeople) + origFace[i,j,k])/(numPeople+1))
     # print meanFace
     return meanFace
+
+def averageImgArr(faces):
+    newPic = numpy.empty((HEIGHT,WIDTH,DEPTH), int)
+    for i in range(HEIGHT):
+        for j in range(WIDTH):
+            avgVal = 0
+            for l in range(len(faces)):
+                avgVal = avgVal + faces[l][i,j,0]
+            x = int((avgVal / len(faces)))
+            for k in range(DEPTH):
+                newPic[i,j,k] = x
+    return newPic
