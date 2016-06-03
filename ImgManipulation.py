@@ -109,12 +109,14 @@ def differenceFace(origFace, meanFace):
     for i in range(HEIGHT):
         for j in range(WIDTH):
             try:
-                if (origFace[i,j,0] < meanFace[i,j,0]):
-                    x = 0
-                else:
-                    x = origFace[i,j,0] - meanFace[i,j,0]
+##                if (origFace[i,j,0] < meanFace[i,j,0]):
+##                    x = 0
+##                else:
+                a = origFace[i,j,0]
+                b = meanFace[i,j,0]
+                x = float(a) - float(b)
                 for k in range(3):
-                    diffPic[i,j,k] = x
+                    diffPic[i,j,k] = int(x)
             except(IndexError):
                 print i, j
                 print origFace

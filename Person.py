@@ -66,3 +66,7 @@ class Person:
     def initDiffFace(self, mf):
         self.differenceFace = iManip.differenceFace(self.meanFace, mf)
         cv2.imwrite("Data/DifferenceFaces/" + str(self.identifier) + ".jpg", self.differenceFace)
+        self.differenceVec = iManip.imageToVector(self.differenceFace)
+        file = open("Data/DifferenceVectors/" + str(self.identifier) + ".txt", "w")
+        for i in range(len(self.differenceVec)):
+            file.write(str(self.differenceVec[i]) + "\n")
