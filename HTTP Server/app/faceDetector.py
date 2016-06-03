@@ -14,36 +14,36 @@ def atFaceDetector():
 
 @app.route('/faceDetector', methods = ['POST'])
 def postFaceDetector():
-    print "Removing outer layer of file..."
-    buf = request.files['image'].read()
-    print "Success!"
+    print "Request recieved at faceDetector\n"
 
-    print "Removing inner layer of file..."
+    print "Loading file..."
+    buf = request.files['image'].read()
     x = np.fromstring(buf, dtype = 'uint8')
     image = cv2.imdecode(x, cv2.IMREAD_UNCHANGED)
-    print "Success!"
+    print "Success!\n"
 
     print "Attempting to find objects..."
     faceLocs = DetectObject.findObject(image,"Face")
-    print "Success!"
+    print "Success!\n"
 
     #Used only if making images for each face
-    faces = []
+    #faces = []
 
-    print "Drawing rectangles..."
-    for (x, y, w, h) in faceLocs:
+    #print "Drawing rectangles..."
+    #for (x, y, w, h) in faceLocs:
         #Crop out and scale the face
         #faces.append(iManip(image, x, y, w, h))
 
         #Draw box around the face
-        cv2.rectangle(image, (x, y-int(h*0.1)), (x+w, int(y+h*1.1)), (0, 255, 0), 2)
-    print "Success!"
+    #    cv2.rectangle(image, (x, y-int(h*0.1)), (x+w, int(y+h*1.1)), (0, 255, 0), 2)
+    #print "Success!"
     print "Face locations:"
     print faceLocs    
+    print
     # Encode boxed image
-    print "Encoding picture for response..."
+    print "Encoding response..."
     flag, buf = cv2.imencode("return.jpg", image, [cv2.IMWRITE_JPEG_QUALITY, 90])
-    print "Success!"
+    print "Success!\n"
 
     # Encode faces
     #bufFaces = []
@@ -59,7 +59,7 @@ def postFaceDetector():
     return faceLocs.tobytes()
 
     # Uncomment to return original image with boxes drawn
-    return buf.tobytes()
+    #return buf.tobytes()
 
     # Uncomment to return map of face images
     #return faceMap
