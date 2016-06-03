@@ -17,5 +17,8 @@ def cropScale():
     x, y, w, h = request.data
     npData = np.fromstring(file, dtype = 'uint8')
     image = cv2.imdecode(npData, cv2.IMREAD_UNCHANGED)
-    
-    return
+
+    processedImage = iManip.cropScaleImage(image, x, y, w, h)
+
+    flag, buf = cv2.imencode(".jpg", processedImage, [cv2.IMWRITE_JPEG_QUALITY, 90])
+    return buf.tobytes()
