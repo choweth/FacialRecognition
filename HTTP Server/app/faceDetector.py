@@ -38,7 +38,8 @@ def postFaceDetector():
         #Draw box around the face
         cv2.rectangle(image, (x, y-int(h*0.1)), (x+w, int(y+h*1.1)), (0, 255, 0), 2)
     print "Success!"
-    
+    print "Face locations:"
+    print faceLocs    
     # Encode boxed image
     print "Encoding picture for response..."
     flag, buf = cv2.imencode("return.jpg", image, [cv2.IMWRITE_JPEG_QUALITY, 90])
