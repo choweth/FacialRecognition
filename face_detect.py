@@ -152,7 +152,7 @@ if __name__ =="__main__":
         file.close()
         print n
         x = raw_input("Who is this face: ")
-        for i in range(7354, 7363):    
+        for i in range(0, 0):    
             pic = "Images/fullcontact/IMG_" + str(i) + ".JPG"
             print i
             image = cv2.imread(pic)
@@ -170,3 +170,10 @@ if __name__ =="__main__":
         file.write(str(n))
         file.close()
         # cv2.imwrite("Data/TestImages/Barbra_Mean_Face_Test.jpg", p.meanFace)
+
+    elif (option == 4):
+        faces = []
+        for i in range(18):
+            faces.append(cv2.imread("Data/MeanFace/" + str(i) + ".jpg"))
+        mf = iManip.averageImgArr(faces)
+        cv2.imwrite("Data/MeanFace/meanFace1.jpg",mf)

@@ -27,7 +27,6 @@ bld/
 [Bb]in/
 [Oo]bj/
 Output/
-Data/
 Images/
 *.pyc
 
