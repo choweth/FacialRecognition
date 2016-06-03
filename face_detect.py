@@ -138,6 +138,21 @@ if __name__ =="__main__":
         file.close()
         for person in people:
             person.initDiffFace(meanFace)
+
+        diffVecs = []
+        for l in range(len(people)):
+            diffVecs.append(people[l].differenceVec)
+        
+        w, faceSpace = numpy.linalg.eig(numpy.dot(diffVecs,zip(*diffVecs)))
+        
+        faceSpace = numpy.dot(faceSpace,diffVecs)
+
+        file = open("Data/FaceSpace.txt", "w")
+        for i in range(len(people[0].differenceVec)):
+            for j in range(len(people)):
+                file.write(str(people[j].differenceVec[i]) + " ")
+            file.write("\n")
+        
 ##        file = open("Data/num.txt", "w")
 ##        file.write(str(len(people)))
 ##        file.close()
@@ -177,3 +192,5 @@ if __name__ =="__main__":
             faces.append(cv2.imread("Data/MeanFace/" + str(i) + ".jpg"))
         mf = iManip.averageImgArr(faces)
         cv2.imwrite("Data/MeanFace/meanFace1.jpg",mf)
+
+        
