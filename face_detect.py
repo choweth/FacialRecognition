@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0, "C:\Users\Jed\Desktop\know-that-face\HTTP Server\src")
+
 import cv2
 import sys
 import math
@@ -8,7 +11,7 @@ import DetectObject
 import Person
 import Face
 import shlex
-
+import Database
 
 if __name__ =="__main__":
     print "0. Old faces code"
@@ -194,3 +197,19 @@ if __name__ =="__main__":
         cv2.imwrite("Data/MeanFace/meanFace1.jpg",mf)
 
         
+    elif (option == 5):
+        plfaccio = Person.Person(0, 0)
+        print "About to store mr pants person"
+        Database.Database.storePerson(plfaccio, plfaccio.identifier)
+        print '"Probably" stored the person. Maybe.'
+        print "About to reload the person."
+        newPerson = Database.Database.getPerson(plfaccio.identifier)
+        print "'Probably' loaded the person. Maybe."
+        if (newPerson == plfaccio):
+            print "They're equal!"
+        else:
+            print "They're not equal..."
+
+        print "The first person is named " + plfaccio.name
+        print "The second person is named " + newPerson.name
+        print "Done."

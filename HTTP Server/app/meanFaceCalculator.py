@@ -1,5 +1,5 @@
 import sys
-sys.path.insert(0, "/root/know-that-face/know-that-face/")
+sys.path.insert(0, "/root/know-that-face/know-that-face/src")
 
 from app import app
 from flask import request
