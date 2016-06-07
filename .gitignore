@@ -251,3 +251,17 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+
+# Data folder
+/Data
+
+# Images folder
+/Images
+
+# Image files of common types
+*.jpg
+*.JPG
+*.png
+*.PNG
+*.bmp
+*.BMP
