@@ -1,4 +1,4 @@
-import Person, Face, ImgManip as iManip
+import Person, Face, ImgManipulation as iManip
 import jsonpickle
 import cv2
 import os

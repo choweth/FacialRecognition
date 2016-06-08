@@ -60,20 +60,6 @@ def findBestMatch(originalDiffVec, comparableImages):
     
     return bestMatch
 
-##Generates a facespace based off the list of pictures passed
-def makeFaceSpace(faces):
-    meanFace = iManip.averageImgArr(faces)
-    diffFaces = []
-    for face in faces:
-        diffFaces.append(iManip.differenceFace(face, meanFace))
-    diffVecs = []
-    for d in diffFaces:
-        diffVecs.append(iManip.imageToVector(d))
-    w, faceSpace = numpy.linalg.eig(numpy.dot(diffVecs,zip(*diffVecs)))
-    # print w
-    faceSpace = numpy.dot(faceSpace,diffVecs)
-    return faceSpace, diffVecs
-
  ##returns a list of all the pictures in the given directory
 def loadPictures(filePath):
     picList = []
