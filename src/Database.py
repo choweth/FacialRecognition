@@ -1,4 +1,4 @@
-import Person, Face, ImgManip as iManip
+import Person, Face, ImgManipulation as iManip
 import jsonpickle
 import cv2
 import os
@@ -64,4 +64,7 @@ class Database:
             diffVecs.append(iManip.imageToVector(d))
         w, faceSpace = numpy.linalg.eig(numpy.dot(diffVecs,zip(*diffVecs)))
         faceSpace = numpy.dot(faceSpace,diffVecs)
+        with open(os.getcwd()+"/HTTP Server/Data/misc/" + str(id) + ".json", 'w') as f:
+            frozen = jsonpickle.encode(person)
+            f.write(frozen)
         return faceSpace, diffVecs
