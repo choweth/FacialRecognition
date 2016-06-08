@@ -1,5 +1,6 @@
 import sys
-sys.path.insert(0, "/root/know-that-face/know-that-face/HTTP Server/src")
+import os
+sys.path.insert(0, os.getcwd()+"\..\src")
 
 from app import app
 from flask import request
