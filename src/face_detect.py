@@ -1,8 +1,5 @@
-import sys
 import os
-sys.path.insert(0, os.getcwd()+"\HTTP Server\src")
 import cv2
-import sys
 import math
 import time
 import numpy
