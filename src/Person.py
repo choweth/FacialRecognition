@@ -13,9 +13,10 @@ class Person:
 
     ##the constructor, accepts a list of images of the person, some identifying tag,
     ##and an optional name.
-    def __init__(self, identification, numImgs, name = "P.L. Faccio", imgs = []):
+    def __init__(self, identification, name = "P.L. Faccio", imgs = []):
         ##Jed's refactored code to work with database:
         self.name = name
+        self.email = name + "@fullcontact.com"
         print self.name
         self.identifier = identification
         self.meanFace = "Data/MeanFace/" + str(self.identifier) + ".jpg"
