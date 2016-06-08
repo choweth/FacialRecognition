@@ -253,7 +253,7 @@ ModelManifest.xml
 .fake/
 
 # Data folder
-/Data
+#/Data
 
 # Images folder
 /Images
