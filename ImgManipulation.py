@@ -180,3 +180,41 @@ def averageImgArr(faces):
             for k in range(DEPTH):
                 newPic[i,j,k] = x
     return newPic
+
+def compare(firstFaceProj, compFaceProj):
+    #epsSquared = 0
+    #for i in range(len(self.faceSpaceProj)):
+    #    epsSquared += int(self.faceSpaceProj[i] - compFace.faceSpaceProj[i])^2
+    
+    epsSquared = numpy.dot(firstFaceProj, compFaceProj)
+    epsSquared = epsSquared / (numpy.linalg.norm(firstFaceProj)*numpy.linalg.norm(compFaceProj))
+    
+    return epsSquared**2
+
+def makeProjections(diffVec, faceSpace):
+    faceSpaceProj = []
+    for i in range(int(faceSpace.shape[0])):
+        currentNumerator = numpy.dot(diffVec, faceSpace[i,:])
+        currentDenominator = numpy.dot(faceSpace[i,:], faceSpace[i,:])
+        faceSpaceProj.append((currentNumerator/currentDenominator))
+    return faceSpaceProj
+
+def additionFace(origFace, meanFace):
+    diffPic = numpy.empty((HEIGHT,WIDTH,DEPTH), dtype='int64')
+    for i in range(HEIGHT):
+        for j in range(WIDTH):
+            try:
+##                if (origFace[i,j,0] < meanFace[i,j,0]):
+##                    x = 0
+##                else:
+                a = origFace[i,j,0]
+                b = meanFace[i,j,0]
+                x = float(a) + float(b)
+                for k in range(3):
+                    diffPic[i,j,k] = int(x)
+            except(IndexError):
+                print i, j
+                print origFace
+                return
+    return diffPic
+

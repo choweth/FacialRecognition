@@ -1,6 +1,6 @@
 import sys
-sys.path.insert(0, "C:\Users\Jed\Desktop\know-that-face\HTTP Server\src")
-
+import os
+sys.path.insert(0, os.getcwd()+"\HTTP Server\src")
 import cv2
 import sys
 import math
@@ -13,11 +13,84 @@ import Face
 import shlex
 import Database
 
+##This (In Theory) should run through the full contact faceset and rturn the pictur that is cl
+        ##closest to the original image
+
+def doTheThing():
+    compImage = cv2.imread("Data/trial.jpg")
+##    face = DetectObject.findObject(compImage,"Face")
+##    for (x,y,w,h) in face:
+##        compImage = iManip.cropScaleImage(compImage,x,y,w,h)
+    compImage = iManip.grayFace(compImage)
+    cv2.imwrite("Data/trialResult.jpg",compImage)
+    file = open("Data/neededShit.txt", "r")
+
+    for line in file:
+        s = line;
+        splitarr = shlex.split(s)
+        people.append(Person.Person(splitarr[0],splitarr[1],splitarr[2]))
+    file.close()
+    faces = []
+    for i in people:
+        faces.append(i.meanFace)
+    netMeanFace = cv2.imread("Data/MeanFace/meanFace.jpg")
+    diffFace = iManip.differenceFace(compImage, netMeanFace)
+    diffVec = iManip.imageToVector(diffFace)
+    x = findBestMatch(diffVec,faces)
+    
+    x = iManip.additionFace(iManip.vectorToImage(x),netMeanFace)
+    cv2.imwrite("Data/AHAHAHAHAHAHA.jpg",x)
+##this, when given a image of a face and a list of other faces should return
+##the face in the list that most resembles the original face
+def findBestMatch(originalDiffVec, comparableImages):
+    
+    faceSpace,diffVecs = makeFaceSpace(comparableImages)
+
+    maxScore = 0
+    bestMatch = 0
+    projs = []
+    original = iManip.makeProjections(originalDiffVec, faceSpace)
+    tempcount = 1
+    for i in diffVecs:
+        w = iManip.makeProjections(i,faceSpace)
+        x = iManip.compare(w,original)
+        y = iManip.compare(original,w)
+        print "Similarity level to face ", tempcount,": ",x
+        tempcount +=1
+        if (x>maxScore):
+            maxScore = x
+            bestMatch = i
+    
+    return bestMatch
+
+##Generates a facespace based off the list of pictures passed
+def makeFaceSpace(faces):
+    meanFace = iManip.averageImgArr(faces)
+    diffFaces = []
+    for face in faces:
+        diffFaces.append(iManip.differenceFace(face, meanFace))
+    diffVecs = []
+    for d in diffFaces:
+        diffVecs.append(iManip.imageToVector(d))
+    w, faceSpace = numpy.linalg.eig(numpy.dot(diffVecs,zip(*diffVecs)))
+    # print w
+    faceSpace = numpy.dot(faceSpace,diffVecs)
+    return faceSpace, diffVecs
+
+ ##returns a list of all the pictures in the given directory
+def loadPictures(filePath):
+    picList = []
+    for i in os.listdir(filePath):
+        picList.append(cv2.imread(filePath+i))
+    return picList
+
+    
 if __name__ =="__main__":
     print "0. Old faces code"
     print "1. More old faces code"
     print "2. Read saved data and make difference faces"
     print "3. Add a new person"
+    print "6. Do The Thing!"
     user = raw_input("Please pick an option: ")
     userInt = int(user)
     now = time.time()   #start of time counter
@@ -213,3 +286,5 @@ if __name__ =="__main__":
         print "The first person is named " + plfaccio.name
         print "The second person is named " + newPerson.name
         print "Done."
+    elif (option == 6):
+        doTheThing()
