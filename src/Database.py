@@ -1,4 +1,4 @@
-import Person, Face
+import Person, Face, ImgManip as iManip
 import jsonpickle
 import cv2
 import os
@@ -50,3 +50,18 @@ class Database:
         Database.storeOriginalFace(originalFace, ID)
         Database.storeGrayFace(grayFace, ID)
         
+
+    ##Generates a facespace based off the list of pictures passed
+    @staticmethod
+    def makeFaceSpace(faces):
+        import numpy
+        meanFace = iManip.averageImgArr(faces)
+        diffFaces = []
+        for face in faces:
+            diffFaces.append(iManip.differenceFace(face, meanFace))
+        diffVecs = []
+        for d in diffFaces:
+            diffVecs.append(iManip.imageToVector(d))
+        w, faceSpace = numpy.linalg.eig(numpy.dot(diffVecs,zip(*diffVecs)))
+        faceSpace = numpy.dot(faceSpace,diffVecs)
+        return faceSpace, diffVecs
