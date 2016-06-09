@@ -36,6 +36,10 @@ class Database:
             thawed = jsonpickle.decode(f.read())
         return thawed
 
+    @staticmethod
+    def getNetMeanFace():
+        return cv2.imread("/Data/MeanFace/meanFace.jpg")
+
 
 
     @staticmethod
