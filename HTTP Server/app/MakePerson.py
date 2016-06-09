@@ -8,6 +8,8 @@ import requests
 import Person
 import Database
 import shlex
+import Extractor
+import cv2
 
 @app.route('/MakePerson', methods = ['GET'])
 def atMakePerson():
@@ -22,15 +24,28 @@ def atmakeperson():
         imgs.append(int(i))
     faces = []
     print imgs
+    #for image in imgs:
+    #    r = requests.post('https://localhost/FaceExtractor', files = {'image': open(os.getcwd()+"/Data/raw_images/IMG_" + str(image) + ".jpg",'rb').read()})
+    #    faces.append(r.content['faces'])
+
     for image in imgs:
-        r = requests.post('https://localhost/FaceExtractor', files = {'image': open(os.getcwd()+"/Data/raw_images/IMG_" + str(image) + ".jpg",'rb').read()})
-        faces.append(r.content['faces'])
+        faceImage = cv2.imread(os.getcwd()+"/Data/raw_images/IMG_" + str(image) + ".jpg")
+        faces.append(Extractor.extractFaces(image, Extractor.detectFaces(faceImage)))
+
     print faces
     ids = [0 for i in range(len(faces))]
     i = 0
     for face in faces:
-        r = requests.post('http://localhost/FaceProcessor', files = {'image': face})
-        ids[i] = r.content
+        #r = requests.post('http://localhost/FaceProcessor', files = {'image': face})
+        #ids[i] = r.content
+        #i += 1
+
+        grayFace = iManip.grayFace(image)
+
+        diffFace = CalcDiffFace.calc(grayFace)
+        diffFace = iManip.imageToVector(diffFace)
+
+        ids[i] = Database.Database.storeFace(grayFace, image, diffFace)
         i += 1
 
     person = Database.Database.makePerson(ids)
