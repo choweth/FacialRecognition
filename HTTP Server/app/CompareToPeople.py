@@ -13,8 +13,12 @@ def atCompareToPeople():
     return "This endpoint will compare a given image to the mean face of all the people"
 
 @app.route('/CompareToPeople', methods = ['POST'])
-def compareToPeople():
-    ID = request.form['id']
+def compareToPeople(ID = -1):
+    
+    # If the function is reached via the endpoint, ID will be -1
+    # Otherwise, ID will be some integer >= 0
+    if (ID == -1):
+        ID = request.form['id']
 
     grayFace = Database.Database.getGrayFace(ID)
 
