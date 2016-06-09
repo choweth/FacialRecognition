@@ -10,10 +10,6 @@ DEPTH = 3        # Depth of stored face images (RGB values)
 
 # Crops out a face, and scales the face to 600x500
 def cropScaleImage(img, x, y, w, h):
-    HEIGHT = len(img)
-    WIDTH = len(img[0])
-    DEPTH = len(img[0][0])
-
     #Crops out the face given the coordinates and width and height of the face
     newImage = img[y:y+h, x:x+w]
 
@@ -117,9 +113,6 @@ def grayFace(img):
 
 # Creates the differenceFace (i.e. greyFace - meanFace) 
 def differenceFace(origFace, meanFace):
-    HEIGHT = len(origFace)
-    WIDTH = len(origFace[0])
-    DEPTH = len(origFace[0][0])
     diffPic = numpy.empty((HEIGHT,WIDTH,DEPTH), dtype='int64')
     for i in range(HEIGHT):
         for j in range(WIDTH):

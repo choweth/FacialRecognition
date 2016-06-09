@@ -66,12 +66,13 @@ class Database:
         with open(os.getcwd()+"/Data/num.txt",'r') as f:
             ID = int(f.readline())
             f.close()
-        with open(os.getcwd()+"/Data/num.txt",'w') as f:
+	with open(os.getcwd()+"/Data/num.txt",'w') as f:
             f.write(str(ID+1))
             f.close()
         Database.storeOriginalFace(originalFace, ID)
         Database.storeGrayFace(grayFace, ID)
         Database.storeDiffFace(diffFace, ID)
+	print "Stored all faces"
         return ID
         
 
