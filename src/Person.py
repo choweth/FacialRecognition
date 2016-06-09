@@ -30,11 +30,10 @@ class Person:
 
         ##Jed's code to work with databases
         faces = []
-        for id in faceIDs:
-            faces.append(cv2.imread(os.getcwd()+"/HTTP Server/Data/GrayFaces/" + str(id) + ".jpg"))
-        
-        #self.meanFace = iManip.averageFaces(faces)
-        cv2.imwrite("Data/MeanFace/" + str(self.identifier) + ".jpg", self.meanFace)
+        for id in self.faceIDs:
+            faces.append(cv2.imread(os.getcwd()+"/Data/GrayFaces/" + str(id) + ".jpg"))
+        meanFace = iManip.averageImgArr(faces)
+        cv2.imwrite("Data/MeanFace/" + str(self.identifier) + ".jpg", meanFace)
 
         
     ##This might not be necessary, but we're not comfortable deleting it yet

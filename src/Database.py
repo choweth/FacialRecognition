@@ -24,8 +24,10 @@ class Database:
 
     @staticmethod
     def getDiffFace(ID):
+        thawed = []
         with open(os.getcwd()+"/Data/DifferenceFaces/" + str(ID) + ".json", 'r') as f:
-            thawed = jsonpickle.decode(f.read())
+            for line in file:
+                thawed.append(line)
         return thawed
 
     @staticmethod
@@ -55,8 +57,10 @@ class Database:
     @staticmethod
     def storeDiffFace(face, ID):
         path = os.getcwd()+"/Data/DifferenceFaces/"
-        path = path + str(ID) + ".jpg"
-        cv2.imwrite(path, face)
+        path = path + str(ID) + ".json"
+        with open(path, 'w') as f:
+            for i in face:
+                f.write(str(i) + '\n')
     @staticmethod
     def storeFace(grayFace, originalFace, diffFace):
         with open(os.getcwd()+"/Data/num.txt",'r') as f:

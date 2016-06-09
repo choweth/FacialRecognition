@@ -11,6 +11,7 @@
 *.ppk
 *.zip
 *.pyc
+*.json
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
