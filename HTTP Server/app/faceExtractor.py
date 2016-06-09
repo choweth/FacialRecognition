@@ -1,6 +1,7 @@
 import sys
 import os
-sys.path.insert(0, os.getcwd()+"\..\src")
+print os.getcwd()
+sys.path.insert(0, os.getcwd()+"/../src")
 
 from app import app
 from flask import request

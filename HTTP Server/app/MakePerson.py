@@ -34,7 +34,7 @@ def atmakeperson():
     #    faces.append(r.content['faces'])
 
     for image in imgs:
-        faceImage = cv2.imread(os.getcwd()+"/Data/raw_images/IMG_" + str(image) + ".jpg")
+        faceImage = cv2.imread(os.getcwd()+"/Data/raw_images/IMG_" + str(image) + ".JPG")
         foundFaces = Extractor.extractFaces(faceImage, Extractor.detectFaces(faceImage))
         for each in foundFaces:
             faces.append(each)

@@ -1,5 +1,6 @@
 import cv2
 import numpy
+import ImgManipulation as iManip
 
 
 def findObject(image,thingToDetect): #Takes in a picture and a key word, if he keyword is
@@ -19,8 +20,10 @@ def findObject(image,thingToDetect): #Takes in a picture and a key word, if he k
     # Create the haar cascade
     faceCascade = cv2.CascadeClassifier(cascPath)
     #convert it to greyscale so the Haar cascade can use it 
+#    gray = iManip.grayFace(image)   
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     # Detect things in the image
+    print 
     things = faceCascade.detectMultiScale(
         gray, #The picture
         scaleFactor=1.1, #The method runs through the same piture multiple time, each time
