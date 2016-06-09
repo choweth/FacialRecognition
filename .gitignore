@@ -254,6 +254,7 @@ ModelManifest.xml
 
 # Data folder
 #/Data
+HTTP\ Server/Data/raw_images/
 
 # Images folder
 /Images

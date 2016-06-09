@@ -15,6 +15,7 @@ def atFaceProcessor():
 
 @app.route('/FaceProcessor', methods = ['POST'])
 def faceProcessor():
+    print "Processing a new face"
     image = Encryption.decode(request.files['image'])
 
     grayFace = iManip.grayFace(image)

@@ -7,25 +7,30 @@ from flask import request
 import requests
 import Person
 import Database
+import shlex
 
-@app.route('MakePerson', methods = ['GET'])
+@app.route('/MakePerson', methods = ['GET'])
 def atMakePerson():
     return "This page makes a Person object"
 
-@app.route('makeperson', methods = ['post'])
+@app.route('/MakePerson', methods = ['POST'])
 def atmakeperson():
-    
-    imgs = request.form['imgs']
+    string = request.form['imgs']
+    a = shlex.split(string)
+    imgs = []
+    for i in a:
+        imgs.append(int(i))
     #raw_images = [0 for i in range(len(imgs))]
     #i = 0
     #for img in imgs:
     #    raw_images[i] = cv2.imread(os.getcwd+"/Data/raw_images/IMG_" + str(img) + ".jpg")
     #    i += 1
     faces = []
+    print imgs
     for image in imgs:
-        r = requests.post('https://localhost/FaceExtractor', files = {'image': open(os.getcwd+"/Data/raw_images/IMG_" + str(img) + ".jpg",'rb').read()})
+        r = requests.post('https://localhost/FaceExtractor', files = {'image': open(os.getcwd()+"/Data/raw_images/IMG_" + str(image) + ".jpg",'rb').read()})
         faces.append(r.content['faces'])
-
+    print faces
     ids = [0 for i in range(len(faces))]
     i = 0
     for face in faces:
