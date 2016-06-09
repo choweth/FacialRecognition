@@ -19,7 +19,6 @@ class Person:
         self.email = str(self.name) + "@fullcontact.com"
         print self.name
         self.identifier = identification
-        self.meanFace = "Data/MeanFace/" + str(self.identifier) + ".jpg"
         self.faces = len(imgs)
         self.faceIDs = imgs
 
@@ -35,12 +34,8 @@ class Person:
         meanFace = iManip.averageImgArr(faces)
         cv2.imwrite("Data/MeanFace/" + str(self.identifier) + ".jpg", meanFace)
 
-        
-    ##This might not be necessary, but we're not comfortable deleting it yet
-##    def initDiffFace(self, mf):
-##        self.differenceFace = iManip.differenceFace(self.meanFace, mf)
-##        cv2.imwrite("Data/DifferenceFaces/" + str(self.identifier) + ".jpg", self.differenceFace)
-##        self.differenceVec = iManip.imageToVector(self.differenceFace)
-##        file = open("Data/DifferenceVectors/" + str(self.identifier) + ".txt", "w")
-##        for i in range(len(self.differenceVec)):
-##            file.write(str(self.differenceVec[i]) + "\n")
+    def setWeights(weights):
+        self.weights = weights
+
+    def getWeights():
+        return self.weights

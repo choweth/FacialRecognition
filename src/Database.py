@@ -40,6 +40,10 @@ class Database:
     def getNetMeanFace():
         return cv2.imread("/Data/MeanFace/meanFace.jpg")
 
+    @staticmethod
+    def getMeanFace(ID):
+        return(cv2.imread('Data/MeanFace/' + str(ID) + '.jpg'))
+
 
 
     @staticmethod
@@ -110,3 +114,19 @@ class Database:
         Database.storePerson(person, ID)
 
         return person
+
+    @staticmethod
+    def makeWeights():
+        with open(os.getcwd()+"/Data/People/num.txt",'r') as f:
+            numPeople = int(f.readline())
+        
+
+        netMeanFace = Database.getNetMeanFace()
+        faceSpace = Database.getFaceSpace()
+        
+        for i in range(numPeople):
+            thisPerson = Database.getPerson(i)
+            thisMeanFace = Database.getMeanFace(i)
+            thisDiffVec = iManip.differenceFace(thisMeanFace, netMeanFace)
+            theseWeights = iManip.makeProjections(thisDiffVec, faceSpace)
+            thisPerson.setWeights(theseWeights)

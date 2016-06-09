@@ -6,6 +6,7 @@ from app import app
 from flask import request
 import Database
 import cv2
+import ImgManipulation as iManip
 
 @app.route('/CompareToPeople', methods = ['GET'])
 def atCompareToPeople():
@@ -20,14 +21,26 @@ def compareToPeople():
     with open(os.getcwd() + "/Data/num.txt", 'r') as f:
         numPeople = int(f.readline())
 
-    faces = [0 for i in range(numPeople)]
+    weights = [0 for i in range(numPeople)]
 
     for i in range(numPeople):
-        faces[i] = cv2.imread("../Data/MeanFace/" + str(i) + ".jpg")
+        weights[i] = Database.Database.getPerson(i).getWeights()
 
     netMeanFace = Database.Database.getNetMeanFace()
     diffFace = Database.Database.getDiffFace(ID)
-    
-    thing = findBestMatch(diffFace, faces)
+    faceSpace = Database.Database.getFaceSpace()
 
-    return 'gj'
+    theseWeights = iManip.makeProjections(diffFace, faceSpace)
+
+    maxCount = 0
+    foundID = 0
+    count = 0
+    for i in weights:
+        temp = iManip.compare(i, theseWeights)
+        if (temp > maxCount):
+            maxCount = temp
+            foundID = count
+        count += 1
+
+
+    return str(foundID)

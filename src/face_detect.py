@@ -42,6 +42,8 @@ def doTheThing():
 def findBestMatch(originalDiffVec, comparableImages):
     
     faceSpace,diffVecs = makeFaceSpace(comparableImages)
+    faceSpace = Database.Database.getFaceSpace
+
 
     maxScore = 0
     bestMatch = 0
