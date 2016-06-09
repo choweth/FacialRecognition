@@ -16,7 +16,7 @@ class Person:
     def __init__(self, identification, name = "P.L. Faccio", imgs = []):
         ##Jed's refactored code to work with database:
         self.name = str(name)
-        self.email = str(name) + "@fullcontact.com"
+        self.email = str(self.name) + "@fullcontact.com"
         print self.name
         self.identifier = identification
         self.meanFace = "Data/MeanFace/" + str(self.identifier) + ".jpg"
