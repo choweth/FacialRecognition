@@ -87,13 +87,16 @@ def averageFaces(faces):
         for j in range(WIDTH):
             avgVal = 0
             for l in range(len(faces)):
-                avgVal = avgVal + faces[l].grayFace[i,j,0]
+                avgVal = avgVal + faces[l][i,j,0]
             x = int((avgVal / len(faces)))
             for k in range(DEPTH):
                 newPic[i,j,k] = x
     return newPic
 
 def grayFace(img):
+    HEIGHT = len(img)
+    WIDTH = len(img[0])
+    DEPTH = len(img[0][0])
     grayPic = numpy.empty((HEIGHT,WIDTH,DEPTH), int)
     avgVal = 0
     for i in range(HEIGHT):
@@ -101,7 +104,8 @@ def grayFace(img):
             y = 0
             avgVal = 0
             for m in range(DEPTH):
-                y = y + img[i,j][m]
+                y = y + img[i,j,m]
+                #print y
             avgVal = avgVal + int(y / 3)
             for m in range(DEPTH):
                grayPic[i][j][m] = avgVal

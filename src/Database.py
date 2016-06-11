@@ -1,73 +1,94 @@
-import Person, Face, ImgManipulation as iManip
+import Person
+import Face
+import ImgManipulation as iManip
 import jsonpickle
 import cv2
 import os
+import shlex
 
 class Database:
     currentPerson = Person.Person(0,0)
 
     @staticmethod
-    def getPerson(id):
-        with open(os.getcwd()+"/HTTP Server/Data/People/" + str(id) + ".json", 'r') as f:
+    def getPerson(ID):
+        with open(os.getcwd()+"/Data/People/" + str(ID) + ".json", 'r') as f:
             thawed = jsonpickle.decode(f.read())
         return thawed
 
     @staticmethod
-    def getColorFace(id):
-        face = cv2.imread(os.getcwd()+"/HTTP Server/Data/OriginalFaces/" + str(id) + ".jpg")
+    def getColorFace(ID):
+        face = cv2.imread("Data/OriginalFaces/" + str(ID) + ".jpg")
         return face
 
     @staticmethod
-    def getGrayFace(id):
-        face = cv2.imread(os.getcwd()+"/HTTP Server/Data/GrayFaces/" + str(id) + ".jpg")
+    def getGrayFace(ID):
+        face = cv2.imread("Data/GrayFaces/" + str(ID) + ".jpg")
         return face
 
     @staticmethod
-    def getDiffFace(id):
-        with open(os.getcwd()+"/HTTP Server/Data/DifferenceFaces/" + str(id) + ".json", 'r') as f:
-            thawed = jsonpickle.decode(f.read())
+    def getDiffFace(ID):
+        thawed = []
+        with open(os.getcwd()+"/Data/DifferenceFaces/" + str(ID) + ".json", 'r') as f:
+            for line in file:
+                thawed.append(line)
         return thawed
 
     @staticmethod
     def getFaceSpace():
-        with open(os.getcwd()+"/HTTP Server/Data/misc/FaceSpace.json", 'r') as f:
-            thawed = jsonpickle.decode(f.read())
-        return thawed
+	faceSpace = []
+        with open(os.getcwd()+"/Data/misc/FaceSpace.txt", 'r') as f:
+	    for line in f:
+		l = shlex.split(line)
+		arr = []
+		for i in l:
+		    arr.append(int(i))
+		faceSpace.append(arr)
+        return faceSpace
+
+    @staticmethod
+    def getNetMeanFace():
+        return cv2.imread("Data/MeanFace/meanFace.jpg")
+
+    @staticmethod
+    def getMeanFace(ID):
+        return(cv2.imread('Data/MeanFace/' + str(ID) + '.jpg'))
 
 
 
     @staticmethod
-    def storePerson(person, id):
-        with open(os.getcwd()+"/HTTP Server/Data/People/" + str(id) + ".json", 'w') as f:
+    def storePerson(person, ID):
+        with open(os.getcwd()+"/Data/People/" + str(ID) + ".json", 'w') as f:
             frozen = jsonpickle.encode(person)
             f.write(frozen)
     
     @staticmethod
     def storeOriginalFace(face, ID):
-        path = os.getcwd()+"/HTTP Server/Data/OriginalFaces/"
+        path = os.getcwd()+"/Data/OriginalFaces/"
         path = path + str(ID) + ".jpg"
         cv2.imwrite(path, face)
     @staticmethod
     def storeGrayFace(face, ID):
-        path = os.getcwd()+"/HTTP Server/Data/GrayFaces/"
+        path = os.getcwd()+"/Data/GrayFaces/"
         path = path + str(ID) + ".jpg"
         cv2.imwrite(path, face)
     @staticmethod
     def storeDiffFace(face, ID):
-        path = os.getcwd()+"/HTTP Server/Data/DifferenceFaces/"
-        path = path + str(ID) + ".jpg"
-        cv2.imwrite(path, face)
+        path = os.getcwd()+"/Data/DifferenceFaces/"
+        path = path + str(ID) + ".json"
+        with open(path, 'w') as f:
+            for i in face:
+                f.write(str(i) + '\n')
     @staticmethod
-    def storeFace(grayFace, originalFace, diffFace):
-        with open(os.getcwd()+"/HTTP Server/Data/num.txt",'r') as f:
+    def storeFace(grayFace, originalFace):
+        with open(os.getcwd()+"/Data/num.txt",'r') as f:
             ID = int(f.readline())
             f.close()
-        with open(os.getcwd()+"/HTTP Server/Data/num.txt",'w') as f:
+	with open(os.getcwd()+"/Data/num.txt",'w') as f:
             f.write(str(ID+1))
             f.close()
         Database.storeOriginalFace(originalFace, ID)
         Database.storeGrayFace(grayFace, ID)
-        Database.storeDiffFace(diffFace, ID)
+        # Database.storeDiffFace(diffFace, ID)
         return ID
         
 
@@ -75,29 +96,46 @@ class Database:
     @staticmethod
     def makeFaceSpace(faces):
         import numpy
-        meanFace = iManip.averageImgArr(faces)
+        meanFace = Database.getNetMeanFace()
         diffFaces = []
-        for face in faces:
+
+	for face in faces:
             diffFaces.append(iManip.differenceFace(face, meanFace))
         diffVecs = []
         for d in diffFaces:
             diffVecs.append(iManip.imageToVector(d))
         w, faceSpace = numpy.linalg.eig(numpy.dot(diffVecs,zip(*diffVecs)))
         faceSpace = numpy.dot(faceSpace,diffVecs)
-        with open(os.getcwd()+"/HTTP Server/Data/misc/FaceSpace.json", 'w') as f:
-            frozen = jsonpickle.encode(person)
-            f.write(frozen)
         return faceSpace, diffVecs
 
     @staticmethod
-    def makePerson(imgs):
-        #id, image id array
-        with open(os.getcwd()+"/HTTP Server/Data/People/num.txt",'r') as f:
+    def makePerson(imgs, name = 'Pants Faccio'):
+	# Replaces spaces in names with periods
+	name = name.replace(' ', '.')
+
+        #ID, image ID array
+        with open(os.getcwd()+"/Data/People/num.txt",'r') as f:
             ID = int(f.readline())
-        with open(os.getcwd()+"/HTTP Server/Data/People/num.txt",'w') as f:
+        with open(os.getcwd()+"/Data/People/num.txt",'w') as f:
             f.write(str(ID+1))
 
-        person = Person.Person(str(ID), imgs = imgs)
-        Database.storePerson(person, id)
+        person = Person.Person(str(ID), imgs = imgs, name = name)
+        Database.storePerson(person, ID)
 
         return person
+
+    @staticmethod
+    def makeWeights():
+        with open(os.getcwd()+"/Data/People/num.txt",'r') as f:
+            numPeople = int(f.readline())
+        
+
+        netMeanFace = Database.getNetMeanFace()
+        faceSpace = Database.getFaceSpace()
+        
+        for i in range(numPeople):
+            thisPerson = Database.getPerson(i)
+            thisMeanFace = Database.getMeanFace(i)
+            thisDiffVec = iManip.differenceFace(thisMeanFace, netMeanFace)
+            theseWeights = iManip.makeProjections(thisDiffVec, faceSpace)
+            thisPerson.setWeights(theseWeights)

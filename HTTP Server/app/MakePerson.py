@@ -7,32 +7,42 @@ from flask import request
 import requests
 import Person
 import Database
+import shlex
+import Extractor
+import cv2
+import ImgManipulation as iManip
+import CalcDiffFace
 
-@app.route('MakePerson', methods = ['GET'])
+@app.route('/MakePerson', methods = ['GET'])
 def atMakePerson():
     return "This page makes a Person object"
 
-@app.route('makeperson', methods = ['post'])
+@app.route('/MakePerson', methods = ['POST'])
 def atmakeperson():
-    
-    imgs = request.form['imgs']
-    #raw_images = [0 for i in range(len(imgs))]
-    #i = 0
-    #for img in imgs:
-    #    raw_images[i] = cv2.imread(os.getcwd+"/Data/raw_images/IMG_" + str(img) + ".jpg")
-    #    i += 1
+    name = request.form['name']
+    print name
+    imgs = []
+    for key in request.form:
+	if key != 'name':
+            imgs.append(int(request.form[key]))
     faces = []
+
     for image in imgs:
-        r = requests.post('https://localhost/FaceExtractor', files = {'image': open(os.getcwd+"/Data/raw_images/IMG_" + str(img) + ".jpg",'rb').read()})
-        faces.append(r.content['faces'])
+        faceImage = cv2.imread(os.getcwd()+"/Data/fullcontact/IMG_" + str(image) + ".JPG")
+        foundFaces = Extractor.extractFaces(faceImage, Extractor.detectFaces(faceImage))
+        for each in foundFaces:
+            faces.append(each)
 
     ids = [0 for i in range(len(faces))]
     i = 0
     for face in faces:
-        r = requests.post('http://localhost/FaceProcessor', files = {'image': face})
-        ids[i] = r.content
-        i += 1
+	grayFace = iManip.grayFace(face)
+	#diffFace = CalcDiffFace.calc(grayFace)
+	#diffFace = iManip.imageToVector(diffFace)
 
-    person = Database.Database.makePerson(ids)
+        ids[i] = Database.Database.storeFace(grayFace, face)
+        i += 1
+        
+    person = Database.Database.makePerson(ids, name = name)
 
     return person.identifier

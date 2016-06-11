@@ -42,6 +42,8 @@ def doTheThing():
 def findBestMatch(originalDiffVec, comparableImages):
     
     faceSpace,diffVecs = makeFaceSpace(comparableImages)
+    faceSpace = Database.Database.getFaceSpace
+
 
     maxScore = 0
     bestMatch = 0
@@ -205,7 +207,7 @@ if __name__ =="__main__":
         meanFace = cv2.imread("Data/MeanFace/meanFace.jpg")
         file = open("Data/neededShit.txt", "r")
         for line in file:
-            s = line;
+            s = line
             splitarr = shlex.split(s)
             people.append(Person.Person(splitarr[0],splitarr[1],splitarr[2]))
         file.close()

@@ -1,7 +1,8 @@
 import sys
 import os
-sys.path.insert(0, os.getcwd()+"/..\src")
-
+sys.path.insert(0, os.getcwd()+"/../src")
+print os.getcwd()
+print os.getcwd() + "/../src"
 from app import app
 from flask import request
 import ImgManipulation as iManip

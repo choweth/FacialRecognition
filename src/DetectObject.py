@@ -1,25 +1,26 @@
 import cv2
 import numpy
+import ImgManipulation as iManip
 
 
 def findObject(image,thingToDetect): #Takes in a picture and a key word, if he keyword is
     #recognised, it will use the appropriate cascade file, and if it is not recognised, it
     #will try to use the input as a filepath to a coascade classifier.
     if (thingToDetect == "Eyes"):
-        cascPath = "Resource Files/eye_cascade.xml"
+        cascPath = "../Resource Files/eye_cascade.xml"
     elif (thingToDetect == "Left Eye"):
-        cascPath = "Resource Files/left_eye_cascade.xml"
+        cascPath = "../Resource Files/left_eye_cascade.xml"
     elif (thingToDetect ==  "Right Eye"):
-        cascPath  = "Resource Files/right_eye_cascade.xml"
+        cascPath = "../Resource Files/right_eye_cascade.xml"
     elif (thingToDetect == "Face"):
-        cascPath = "Resource Files/haarcascade_frontalface_default.xml"
+        cascPath = "../Resource Files/haarcascade_frontalface_default.xml"
     else:
         cascPath = thingToDetect
-
 
     # Create the haar cascade
     faceCascade = cv2.CascadeClassifier(cascPath)
     #convert it to greyscale so the Haar cascade can use it 
+#    gray = iManip.grayFace(image)   
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     # Detect things in the image
     things = faceCascade.detectMultiScale(
