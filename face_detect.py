@@ -10,6 +10,7 @@ import Face
 import shlex
 import Database
 
+
 ##This (In Theory) should run through the full contact faceset and return the pictur that is cl
         ##closest to the original image
 
@@ -42,8 +43,6 @@ def doTheThing():
 def findBestMatch(originalDiffVec, comparableImages):
     
     faceSpace,diffVecs = makeFaceSpace(comparableImages)
-    faceSpace = Database.Database.getFaceSpace
-
 
     maxScore = 0
     bestMatch = 0
@@ -61,20 +60,6 @@ def findBestMatch(originalDiffVec, comparableImages):
             bestMatch = i
     
     return bestMatch
-
-##Generates a facespace based off the list of pictures passed
-def makeFaceSpace(faces):
-    meanFace = iManip.averageImgArr(faces)
-    diffFaces = []
-    for face in faces:
-        diffFaces.append(iManip.differenceFace(face, meanFace))
-    diffVecs = []
-    for d in diffFaces:
-        diffVecs.append(iManip.imageToVector(d))
-    w, faceSpace = numpy.linalg.eig(numpy.dot(diffVecs,zip(*diffVecs)))
-    # print w
-    faceSpace = numpy.dot(faceSpace,diffVecs)
-    return faceSpace, diffVecs
 
  ##returns a list of all the pictures in the given directory
 def loadPictures(filePath):
@@ -207,7 +192,7 @@ if __name__ =="__main__":
         meanFace = cv2.imread("Data/MeanFace/meanFace.jpg")
         file = open("Data/neededShit.txt", "r")
         for line in file:
-            s = line
+            s = line;
             splitarr = shlex.split(s)
             people.append(Person.Person(splitarr[0],splitarr[1],splitarr[2]))
         file.close()
