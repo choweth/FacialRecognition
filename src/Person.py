@@ -8,7 +8,7 @@ import random
 import Face
 import os
 
-class Person:
+class Person(object):
     # A class to contain anything a person may need to keep track of
 
     ##the constructor, accepts a list of images of the person, some identifying tag,
@@ -34,8 +34,8 @@ class Person:
         meanFace = iManip.averageImgArr(faces)
         cv2.imwrite("Data/MeanFace/" + str(self.identifier) + ".jpg", meanFace)
 
-    def setWeights(weights):
+    def setWeights(self, weights):
         self.weights = weights
 
-    def getWeights():
+    def getWeights(self):
         return self.weights

@@ -1,7 +1,10 @@
-import Person, Face, ImgManipulation as iManip
+import Person
+import Face
+import ImgManipulation as iManip
 import jsonpickle
 import cv2
 import os
+import shlex
 
 class Database:
     currentPerson = Person.Person(0,0)
@@ -14,12 +17,12 @@ class Database:
 
     @staticmethod
     def getColorFace(ID):
-        face = cv2.imread(os.getcwd()+"/Data/OriginalFaces/" + str(ID) + ".jpg")
+        face = cv2.imread("Data/OriginalFaces/" + str(ID) + ".jpg")
         return face
 
     @staticmethod
     def getGrayFace(ID):
-        face = cv2.imread(os.getcwd()+"/Data/GrayFaces/" + str(ID) + ".jpg")
+        face = cv2.imread("Data/GrayFaces/" + str(ID) + ".jpg")
         return face
 
     @staticmethod
@@ -32,18 +35,23 @@ class Database:
 
     @staticmethod
     def getFaceSpace():
-        with open(os.getcwd()+"/Data/misc/FaceSpace.json", 'r') as f:
-            thawed = jsonpickle.decode(f.read())
-        return thawed
+	faceSpace = []
+        with open(os.getcwd()+"/Data/misc/FaceSpace.txt", 'r') as f:
+	    for line in f:
+		l = shlex.split(line)
+		arr = []
+		for i in l:
+		    arr.append(int(i))
+		faceSpace.append(arr)
+        return faceSpace
 
     @staticmethod
     def getNetMeanFace():
-	print os.getcwd()
-        return cv2.imread("/Data/MeanFace/meanFace.jpg")
+        return cv2.imread("Data/MeanFace/meanFace.jpg")
 
     @staticmethod
     def getMeanFace(ID):
-        return(cv2.imread('/Data/MeanFace/' + str(ID) + '.jpg'))
+        return(cv2.imread('Data/MeanFace/' + str(ID) + '.jpg'))
 
 
 
@@ -88,8 +96,8 @@ class Database:
     @staticmethod
     def makeFaceSpace(faces):
         import numpy
-        meanFace = iManip.averageImgArr(faces)
-        diffFace = []
+        meanFace = Database.getNetMeanFace()
+        diffFaces = []
 
 	for face in faces:
             diffFaces.append(iManip.differenceFace(face, meanFace))
@@ -98,9 +106,6 @@ class Database:
             diffVecs.append(iManip.imageToVector(d))
         w, faceSpace = numpy.linalg.eig(numpy.dot(diffVecs,zip(*diffVecs)))
         faceSpace = numpy.dot(faceSpace,diffVecs)
-        with open(os.getcwd()+"/Data/misc/FaceSpace.json", 'w') as f:
-            frozen = jsonpickle.encode(person)
-            f.write(frozen)
         return faceSpace, diffVecs
 
     @staticmethod
