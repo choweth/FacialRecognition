@@ -25,7 +25,7 @@ class Database:
     @staticmethod
     def getDiffFace(ID):
         thawed = []
-        with open(os.getcwd()+"/Data/DifferenceFaces/" + str(ID) + ".json", 'r') as f:
+        with open(os.getcwd()+"/Data/DifferenceFaces/" + str(ID) + ".txt", 'r') as f:
             for line in file:
                 thawed.append(line)
         return thawed
@@ -65,7 +65,7 @@ class Database:
     @staticmethod
     def storeDiffFace(face, ID):
         path = os.getcwd()+"/Data/DifferenceFaces/"
-        path = path + str(ID) + ".json"
+        path = path + str(ID) + ".txt"
         with open(path, 'w') as f:
             for i in face:
                 f.write(str(i) + '\n')

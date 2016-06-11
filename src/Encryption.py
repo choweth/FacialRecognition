@@ -10,3 +10,8 @@ def decode(file):
     x = np.fromstring(buf, dtype = 'uint8')
     image = cv2.imdecode(x, cv2.IMREAD_UNCHANGED)
     return image
+
+def localDecode(buf):
+    x = np.fromstring(buf, dtype = 'uint8')
+    image = cv2.imdecode(x, cv2.IMREAD_UNCHANGED)
+    return image

@@ -33,9 +33,9 @@ def atmakeperson():
     ids = [0 for i in range(len(faces))]
     i = 0
     for face in faces:
-	grayFace = iManip.grayFace(face)
-	diffFace = CalcDiffFace.calc(grayFace)
-	diffFace = iManip.imageToVector(diffFace)
+        grayFace = iManip.grayFace(face)
+        diffFace = CalcDiffFace.calc(grayFace)
+        diffFace = iManip.imageToVector(diffFace)
 
         ids[i] = Database.Database.storeFace(grayFace, face, diffFace)
         i += 1
