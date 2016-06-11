@@ -1,7 +1,10 @@
-import Person, Face, ImgManipulation as iManip
+import Person
+import Face
+import ImgManipulation as iManip
 import jsonpickle
 import cv2
 import os
+import shlex
 
 class Database:
     currentPerson = Person.Person(0,0)
@@ -14,12 +17,12 @@ class Database:
 
     @staticmethod
     def getColorFace(ID):
-        face = cv2.imread(os.getcwd()+"/Data/OriginalFaces/" + str(ID) + ".jpg")
+        face = cv2.imread("Data/OriginalFaces/" + str(ID) + ".jpg")
         return face
 
     @staticmethod
     def getGrayFace(ID):
-        face = cv2.imread(os.getcwd()+"/Data/GrayFaces/" + str(ID) + ".jpg")
+        face = cv2.imread("Data/GrayFaces/" + str(ID) + ".jpg")
         return face
 
     @staticmethod
@@ -32,13 +35,19 @@ class Database:
 
     @staticmethod
     def getFaceSpace():
-        with open(os.getcwd()+"/Data/misc/FaceSpace.json", 'r') as f:
-            thawed = jsonpickle.decode(f.read())
-        return thawed
+	faceSpace = []
+        with open(os.getcwd()+"/Data/misc/FaceSpace.txt", 'r') as f:
+	    for line in f:
+		l = shlex.split(line)
+		arr = []
+		for i in l:
+		    arr.append(int(i))
+		faceSpace.append(arr)
+        return faceSpace
 
     @staticmethod
     def getNetMeanFace():
-        return cv2.imread("/Data/MeanFace/meanFace.jpg")
+        return cv2.imread("Data/MeanFace/meanFace.jpg")
 
     @staticmethod
     def getMeanFace(ID):
@@ -70,7 +79,7 @@ class Database:
             for i in face:
                 f.write(str(i) + '\n')
     @staticmethod
-    def storeFace(grayFace, originalFace, diffFace):
+    def storeFace(grayFace, originalFace):
         with open(os.getcwd()+"/Data/num.txt",'r') as f:
             ID = int(f.readline())
             f.close()
@@ -79,8 +88,7 @@ class Database:
             f.close()
         Database.storeOriginalFace(originalFace, ID)
         Database.storeGrayFace(grayFace, ID)
-        Database.storeDiffFace(diffFace, ID)
-	print "Stored all faces"
+        # Database.storeDiffFace(diffFace, ID)
         return ID
         
 
@@ -88,29 +96,30 @@ class Database:
     @staticmethod
     def makeFaceSpace(faces):
         import numpy
-        meanFace = iManip.averageImgArr(faces)
+        meanFace = Database.getNetMeanFace()
         diffFaces = []
-        for face in faces:
+
+	for face in faces:
             diffFaces.append(iManip.differenceFace(face, meanFace))
         diffVecs = []
         for d in diffFaces:
             diffVecs.append(iManip.imageToVector(d))
         w, faceSpace = numpy.linalg.eig(numpy.dot(diffVecs,zip(*diffVecs)))
         faceSpace = numpy.dot(faceSpace,diffVecs)
-        with open(os.getcwd()+"/Data/misc/FaceSpace.json", 'w') as f:
-            frozen = jsonpickle.encode(person)
-            f.write(frozen)
         return faceSpace, diffVecs
 
     @staticmethod
-    def makePerson(imgs):
+    def makePerson(imgs, name = 'Pants Faccio'):
+	# Replaces spaces in names with periods
+	name = name.replace(' ', '.')
+
         #ID, image ID array
         with open(os.getcwd()+"/Data/People/num.txt",'r') as f:
             ID = int(f.readline())
         with open(os.getcwd()+"/Data/People/num.txt",'w') as f:
             f.write(str(ID+1))
 
-        person = Person.Person(str(ID), imgs = imgs)
+        person = Person.Person(str(ID), imgs = imgs, name = name)
         Database.storePerson(person, ID)
 
         return person
