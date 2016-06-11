@@ -38,11 +38,12 @@ class Database:
 
     @staticmethod
     def getNetMeanFace():
+	print os.getcwd()
         return cv2.imread("/Data/MeanFace/meanFace.jpg")
 
     @staticmethod
     def getMeanFace(ID):
-        return(cv2.imread('Data/MeanFace/' + str(ID) + '.jpg'))
+        return(cv2.imread('/Data/MeanFace/' + str(ID) + '.jpg'))
 
 
 
@@ -70,7 +71,7 @@ class Database:
             for i in face:
                 f.write(str(i) + '\n')
     @staticmethod
-    def storeFace(grayFace, originalFace, diffFace):
+    def storeFace(grayFace, originalFace):
         with open(os.getcwd()+"/Data/num.txt",'r') as f:
             ID = int(f.readline())
             f.close()
@@ -79,8 +80,7 @@ class Database:
             f.close()
         Database.storeOriginalFace(originalFace, ID)
         Database.storeGrayFace(grayFace, ID)
-        Database.storeDiffFace(diffFace, ID)
-	print "Stored all faces"
+        # Database.storeDiffFace(diffFace, ID)
         return ID
         
 
@@ -89,8 +89,9 @@ class Database:
     def makeFaceSpace(faces):
         import numpy
         meanFace = iManip.averageImgArr(faces)
-        diffFaces = []
-        for face in faces:
+        diffFace = []
+
+	for face in faces:
             diffFaces.append(iManip.differenceFace(face, meanFace))
         diffVecs = []
         for d in diffFaces:
@@ -103,14 +104,17 @@ class Database:
         return faceSpace, diffVecs
 
     @staticmethod
-    def makePerson(imgs):
+    def makePerson(imgs, name = 'Pants Faccio'):
+	# Replaces spaces in names with periods
+	name = name.replace(' ', '.')
+
         #ID, image ID array
         with open(os.getcwd()+"/Data/People/num.txt",'r') as f:
             ID = int(f.readline())
         with open(os.getcwd()+"/Data/People/num.txt",'w') as f:
             f.write(str(ID+1))
 
-        person = Person.Person(str(ID), imgs = imgs)
+        person = Person.Person(str(ID), imgs = imgs, name = name)
         Database.storePerson(person, ID)
 
         return person

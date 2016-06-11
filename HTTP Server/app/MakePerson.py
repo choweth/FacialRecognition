@@ -19,13 +19,16 @@ def atMakePerson():
 
 @app.route('/MakePerson', methods = ['POST'])
 def atmakeperson():
+    name = request.form['name']
+    print name
     imgs = []
     for key in request.form:
-        imgs.append(int(request.form[key]))
+	if key != 'name':
+            imgs.append(int(request.form[key]))
     faces = []
 
     for image in imgs:
-        faceImage = cv2.imread(os.getcwd()+"/Data/raw_images/IMG_" + str(image) + ".JPG")
+        faceImage = cv2.imread(os.getcwd()+"/Data/fullcontact/IMG_" + str(image) + ".JPG")
         foundFaces = Extractor.extractFaces(faceImage, Extractor.detectFaces(faceImage))
         for each in foundFaces:
             faces.append(each)
@@ -34,12 +37,12 @@ def atmakeperson():
     i = 0
     for face in faces:
 	grayFace = iManip.grayFace(face)
-	diffFace = CalcDiffFace.calc(grayFace)
-	diffFace = iManip.imageToVector(diffFace)
+	#diffFace = CalcDiffFace.calc(grayFace)
+	#diffFace = iManip.imageToVector(diffFace)
 
-        ids[i] = Database.Database.storeFace(grayFace, face, diffFace)
+        ids[i] = Database.Database.storeFace(grayFace, face)
         i += 1
         
-    person = Database.Database.makePerson(ids)
+    person = Database.Database.makePerson(ids, name = name)
 
     return person.identifier
